@@ -15,6 +15,7 @@ interface AuthContextValue {
   hasProfile: boolean | null;
   signInWithGoogle: () => Promise<void>;
   signOut: () => Promise<void>;
+  refreshProfile: () => Promise<void>;
 }
 
 const AuthContext = createContext<AuthContextValue | undefined>(undefined);
@@ -73,6 +74,12 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     });
   }
 
+  async function refreshProfile() {
+    if (user) {
+      await checkProfile(user.id);
+    }
+  }
+
   async function signOut() {
     await supabase.auth.signOut();
     setHasProfile(null);
@@ -80,7 +87,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 
   return (
     <AuthContext.Provider
-      value={{ user, session, loading, hasProfile, signInWithGoogle, signOut }}
+      value={{ user, session, loading, hasProfile, signInWithGoogle, signOut, refreshProfile }}
     >
       {children}
     </AuthContext.Provider>

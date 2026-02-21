@@ -20,7 +20,7 @@ const usernameSchema = z.object({
 type UsernameForm = z.infer<typeof usernameSchema>;
 
 export default function SetupUsernamePage() {
-  const { user } = useAuth();
+  const { user, refreshProfile } = useAuth();
   const navigate = useNavigate();
   const [serverError, setServerError] = useState('');
 
@@ -59,6 +59,7 @@ export default function SetupUsernamePage() {
       return;
     }
 
+    await refreshProfile();
     navigate('/play', { replace: true });
   }
 
