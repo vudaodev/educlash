@@ -2,6 +2,7 @@ import { useState } from 'react';
 import {
   Dialog,
   DialogContent,
+  DialogDescription,
   DialogHeader,
   DialogTitle,
 } from '@/components/ui/dialog';
@@ -65,6 +66,7 @@ export function UploadMaterialModal({ open, onOpenChange }: Props) {
       <DialogContent>
         <DialogHeader>
           <DialogTitle>Upload Material</DialogTitle>
+          <DialogDescription>Upload a PDF, PPTX, or paste text to create study material.</DialogDescription>
         </DialogHeader>
         <Tabs defaultValue="file">
           <TabsList className="w-full">
