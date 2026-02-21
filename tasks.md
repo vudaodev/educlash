@@ -23,66 +23,66 @@
 
 | # | Task | Status | Depends On | Notes |
 |---|------|--------|------------|-------|
-| 1.1.1 | * Create GitHub repo, add team members, agree on branching strategy | `[ ]` | — | Use `main` as always-deployable |
-| 1.1.2 | * Scaffold frontend with Vite + React + TypeScript | `[ ]` | 1.1.1 | `npm create vite@latest . -- --template react-ts` |
-| 1.1.3 | * Install and configure Tailwind CSS | `[ ]` | 1.1.2 | Follow Vite+Tailwind guide |
-| 1.1.4 | * Install React Router v6 and wire up root `<BrowserRouter>` in `main.tsx` | `[ ]` | 1.1.2 | — |
-| 1.1.5 | * Initialize shadcn/ui: run `npx shadcn@latest init`, configure `components.json` | `[ ]` | 1.1.3 | Sets up `cn()` utility, CSS variables, path aliases |
-| 1.1.6 | * Add shadcn/ui components: Button, Input, Card, Dialog, Toast, Skeleton, Badge, Avatar, Tabs, DropdownMenu | `[ ]` | 1.1.5 | `npx shadcn@latest add button input card dialog sonner skeleton badge avatar tabs dropdown-menu` |
-| 1.1.7 | * Install TanStack Query; wrap app in `<QueryClientProvider>` in `main.tsx` | `[ ]` | 1.1.2 | `npm i @tanstack/react-query` |
-| 1.1.8 | * Install React Hook Form + Zod + resolver | `[ ]` | 1.1.2 | `npm i react-hook-form zod @hookform/resolvers` |
-| 1.1.9 | * Set up `.env` file; add `.env` to `.gitignore` | `[ ]` | 1.1.1 | Vars: `VITE_SUPABASE_URL`, `VITE_SUPABASE_ANON_KEY` |
-| 1.1.10 | * Create Supabase project, capture project URL and anon key | `[ ]` | — | Also note service role key for Edge Functions |
+| 1.1.1 | * Create GitHub repo, add team members, agree on branching strategy | `[x]` | — | Use `main` as always-deployable |
+| 1.1.2 | * Scaffold frontend with Vite + React + TypeScript | `[x]` | 1.1.1 | `npm create vite@latest . -- --template react-ts` |
+| 1.1.3 | * Install and configure Tailwind CSS | `[x]` | 1.1.2 | Tailwind v4 with `@tailwindcss/vite` plugin |
+| 1.1.4 | * Install React Router v6 and wire up root `<BrowserRouter>` in `main.tsx` | `[x]` | 1.1.2 | — |
+| 1.1.5 | * Initialize shadcn/ui: run `npx shadcn@latest init`, configure `components.json` | `[x]` | 1.1.3 | Sets up `cn()` utility, CSS variables, path aliases |
+| 1.1.6 | * Add shadcn/ui components: Button, Input, Card, Dialog, Toast, Skeleton, Badge, Avatar, Tabs, DropdownMenu | `[x]` | 1.1.5 | Added 14 components including Label, Textarea, Select, Progress |
+| 1.1.7 | * Install TanStack Query; wrap app in `<QueryClientProvider>` in `main.tsx` | `[x]` | 1.1.2 | `npm i @tanstack/react-query` |
+| 1.1.8 | * Install React Hook Form + Zod + resolver | `[x]` | 1.1.2 | `npm i react-hook-form zod @hookform/resolvers` |
+| 1.1.9 | * Set up `.env` file; add `.env` to `.gitignore` | `[x]` | 1.1.1 | Vars: `VITE_SUPABASE_URL`, `VITE_SUPABASE_ANON_KEY` |
+| 1.1.10 | * Create Supabase project, capture project URL and anon key | `[x]` | — | Also note service role key for Edge Functions |
 | 1.1.11 | Configure Vercel deployment: connect repo, set env vars | `[ ]` | 1.1.2, 1.1.10 | Single deployment target — no backend to deploy |
-| 1.1.12 | * Add top-level React `<ErrorBoundary>` component wrapping `<App>` | `[ ]` | 1.1.2 | Prevents white-screen crashes during demo |
+| 1.1.12 | * Add top-level React `<ErrorBoundary>` component wrapping `<App>` | `[x]` | 1.1.2 | `src/components/ErrorBoundary.tsx` |
 
 ### 1.2 Database Schema
 
 | # | Task | Status | Depends On | Notes |
 |---|------|--------|------------|-------|
-| 1.2.1 | * Create `users` table: `id (uuid, PK, refs auth.users)`, `username (text, unique)`, `email`, `avatar_url`, `xp (int, default 0)`, `current_streak (int, default 0)`, `streak_last_date (date)`, `wins (int, default 0)`, `losses (int, default 0)`, `created_at` | `[ ]` | 1.1.10 | Enable RLS |
-| 1.2.2 | * Create `friendships` table: `id`, `user_id`, `friend_id`, `status (pending/accepted)`, `created_at` | `[ ]` | 1.2.1 | Composite unique on `(user_id, friend_id)` |
-| 1.2.3 | * Create `teams` table: `id`, `name`, `owner_id`, `invite_code (unique)`, `created_at` | `[ ]` | 1.2.1 | — |
-| 1.2.4 | * Create `team_members` table: `team_id`, `user_id`, `joined_at`; composite PK | `[ ]` | 1.2.3 | — |
-| 1.2.5 | * Create `folders` table: `id`, `name`, `owner_id`, `team_id (nullable)`, `created_at` | `[ ]` | 1.2.1 | — |
-| 1.2.6 | * Create `materials` table: `id`, `owner_id`, `team_id (nullable)`, `folder_id (nullable)`, `title`, `extracted_text`, `file_url`, `source_type (pdf/pptx/text)`, `created_at` | `[ ]` | 1.2.5 | — |
-| 1.2.7 | * Create `quizzes` table: `id`, `creator_id`, `question_count`, `time_limit_minutes`, `mode (solo/competitive)`, `created_at` | `[ ]` | 1.2.1 | — |
-| 1.2.8 | * Create `questions` table: `id`, `quiz_id`, `question_text`, `options (jsonb)`, `correct_option_index`, `order` | `[ ]` | 1.2.7 | `options` is a JSON array of 4 strings |
-| 1.2.9 | * Create `challenges` table: `id`, `quiz_id`, `challenger_id`, `challenged_id`, `status (pending/accepted/expired/completed)`, `expires_at`, `created_at` | `[ ]` | 1.2.7 | Default `expires_at = now() + 24h` |
-| 1.2.10 | * Create `quiz_attempts` table: `id`, `quiz_id`, `user_id`, `challenge_id (nullable)`, `score`, `time_taken_seconds`, `completed_at` | `[ ]` | 1.2.9 | — |
-| 1.2.11 | * Enable RLS on all tables; write RLS policies | `[ ]` | 1.2.10 | Critical since frontend talks to DB directly. Users read/write own rows; friendships/challenges readable by both parties; team materials readable by team members |
-| 1.2.12 | Create Supabase Storage bucket `materials` for file uploads; set RLS policy | `[ ]` | 1.1.10 | Users can upload/read own files |
+| 1.2.1 | * Create `users` table: `id (uuid, PK, refs auth.users)`, `username (text, unique)`, `email`, `avatar_url`, `xp (int, default 0)`, `current_streak (int, default 0)`, `streak_last_date (date)`, `wins (int, default 0)`, `losses (int, default 0)`, `created_at` | `[x]` | 1.1.10 | SQL ready in `supabase/schema.sql` — run in Supabase SQL Editor |
+| 1.2.2 | * Create `friendships` table: `id`, `user_id`, `friend_id`, `status (pending/accepted)`, `created_at` | `[x]` | 1.2.1 | SQL ready in `supabase/schema.sql` |
+| 1.2.3 | * Create `teams` table: `id`, `name`, `owner_id`, `invite_code (unique)`, `created_at` | `[x]` | 1.2.1 | SQL ready in `supabase/schema.sql` |
+| 1.2.4 | * Create `team_members` table: `team_id`, `user_id`, `joined_at`; composite PK | `[x]` | 1.2.3 | SQL ready in `supabase/schema.sql` |
+| 1.2.5 | * Create `folders` table: `id`, `name`, `owner_id`, `team_id (nullable)`, `created_at` | `[x]` | 1.2.1 | SQL ready in `supabase/schema.sql` |
+| 1.2.6 | * Create `materials` table: `id`, `owner_id`, `team_id (nullable)`, `folder_id (nullable)`, `title`, `extracted_text`, `file_url`, `source_type (pdf/pptx/text)`, `created_at` | `[x]` | 1.2.5 | SQL ready in `supabase/schema.sql` |
+| 1.2.7 | * Create `quizzes` table: `id`, `creator_id`, `question_count`, `time_limit_minutes`, `mode (solo/competitive)`, `created_at` | `[x]` | 1.2.1 | SQL ready in `supabase/schema.sql` |
+| 1.2.8 | * Create `questions` table: `id`, `quiz_id`, `question_text`, `options (jsonb)`, `correct_option_index`, `order` | `[x]` | 1.2.7 | SQL ready in `supabase/schema.sql` |
+| 1.2.9 | * Create `challenges` table: `id`, `quiz_id`, `challenger_id`, `challenged_id`, `status (pending/accepted/expired/completed)`, `expires_at`, `created_at` | `[x]` | 1.2.7 | SQL ready in `supabase/schema.sql` |
+| 1.2.10 | * Create `quiz_attempts` table: `id`, `quiz_id`, `user_id`, `challenge_id (nullable)`, `score`, `time_taken_seconds`, `completed_at` | `[~]` | 1.2.9 | SQL ready in `supabase/schema.sql` |
+| 1.2.11 | * Enable RLS on all tables; write RLS policies | `[x]` | 1.2.10 | SQL ready in `supabase/schema.sql` — all 10 tables covered |
+| 1.2.12 | Create Supabase Storage bucket `materials` for file uploads; set RLS policy | `[x]` | 1.1.10 | SQL ready in `supabase/schema.sql` |
 
 ### 1.3 Postgres Functions (RPCs)
 
 | # | Task | Status | Depends On | Notes |
 |---|------|--------|------------|-------|
-| 1.3.1 | * Create `submit_quiz_attempt(p_quiz_id, p_answers, p_time_taken, p_challenge_id)` — scores attempt, inserts row, awards +10 XP, updates streak, returns `{ score, correct_count, xp_earned }` | `[ ]` | 1.2.10, 1.2.1 | Atomic transaction: no race conditions on XP/streak |
-| 1.3.2 | * Create `complete_challenge(p_challenge_id)` — compares both attempts, determines winner (score then time), awards +25 XP to winner, updates wins/losses, sets challenge status to 'completed' | `[ ]` | 1.2.9, 1.2.10 | Called automatically by `submit_quiz_attempt` when both attempts exist |
-| 1.3.3 | * Create `update_streak(p_user_id)` — checks `streak_last_date`, increments or resets `current_streak`, awards +5 XP for streak bonus | `[ ]` | 1.2.1 | Called within `submit_quiz_attempt`. Compare against `current_date` (UTC) |
-| 1.3.4 | Create `generate_invite_code()` — returns unique 6-char alphanumeric code | `[ ]` | — | Used by team creation. `substr(md5(random()::text), 1, 6)` with uniqueness check |
+| 1.3.1 | * Create `submit_quiz_attempt(p_quiz_id, p_answers, p_time_taken, p_challenge_id)` — scores attempt, inserts row, awards +10 XP, updates streak, returns `{ score, correct_count, xp_earned }` | `[~]` | 1.2.10, 1.2.1 | SQL ready in `supabase/schema.sql` |
+| 1.3.2 | * Create `complete_challenge(p_challenge_id)` — compares both attempts, determines winner (score then time), awards +25 XP to winner, updates wins/losses, sets challenge status to 'completed' | `[x]` | 1.2.9, 1.2.10 | SQL ready in `supabase/schema.sql` |
+| 1.3.3 | * Create `update_streak(p_user_id)` — checks `streak_last_date`, increments or resets `current_streak`, awards +5 XP for streak bonus | `[x]` | 1.2.1 | SQL ready in `supabase/schema.sql` |
+| 1.3.4 | Create `generate_invite_code()` — returns unique 6-char alphanumeric code | `[x]` | — | SQL ready in `supabase/schema.sql` |
 
 ### 1.4 Authentication
 
 | # | Task | Status | Depends On | Notes |
 |---|------|--------|------------|-------|
-| 1.4.1 | * Install `@supabase/supabase-js`; create `src/lib/supabase.ts` client singleton | `[ ]` | 1.1.10, 1.1.2 | Export typed client |
-| 1.4.2 | * Enable Google OAuth in Supabase dashboard; configure redirect URLs | `[ ]` | 1.1.10 | localhost:5173 (dev) + production domain |
-| 1.4.3 | * Create `AuthContext` — wraps `supabase.auth.onAuthStateChange`, exposes `user`, `session`, `loading`, `signInWithGoogle`, `signOut` | `[ ]` | 1.4.1 | — |
-| 1.4.4 | * Create `<ProtectedRoute>` component — redirects to `/login` if no session | `[ ]` | 1.4.3 | — |
-| 1.4.5 | * Build `/login` page — "Continue with Google" button using shadcn Button | `[ ]` | 1.4.3, 1.1.6 | Clean, branded UI |
-| 1.4.6 | * Build `/setup-username` page — React Hook Form with Zod validation, username availability check via `supabase.from('users').select().eq('username', input)`, submit inserts `users` row | `[ ]` | 1.4.3, 1.2.1, 1.1.8 | Redirect here if no `users` row exists for auth user |
-| 1.4.7 | Add post-login redirect check in `AuthContext`: if no `users` row for `auth.uid()`, redirect to `/setup-username` | `[ ]` | 1.4.6 | Query `users` table on auth state change |
-| 1.4.8 | Create `useCurrentUser` hook — TanStack Query wrapper for fetching current user's profile from `users` table | `[ ]` | 1.4.3, 1.1.7, 1.2.1 | Used throughout the app for XP, streak, etc. |
+| 1.4.1 | * Install `@supabase/supabase-js`; create `src/lib/supabase.ts` client singleton | `[x]` | 1.1.10, 1.1.2 | `src/lib/supabase.ts` |
+| 1.4.2 | * Enable Google OAuth in Supabase dashboard; configure redirect URLs | `[x]` | 1.1.10 | localhost:5173 (dev) + production domain |
+| 1.4.3 | * Create `AuthContext` — wraps `supabase.auth.onAuthStateChange`, exposes `user`, `session`, `loading`, `signInWithGoogle`, `signOut` | `[x]` | 1.4.1 | `src/contexts/AuthContext.tsx` |
+| 1.4.4 | * Create `<ProtectedRoute>` component — redirects to `/login` if no session | `[x]` | 1.4.3 | `src/components/ProtectedRoute.tsx` |
+| 1.4.5 | * Build `/login` page — "Continue with Google" button using shadcn Button | `[x]` | 1.4.3, 1.1.6 | `src/pages/LoginPage.tsx` |
+| 1.4.6 | * Build `/setup-username` page — React Hook Form with Zod validation, username availability check via `supabase.from('users').select().eq('username', input)`, submit inserts `users` row | `[x]` | 1.4.3, 1.2.1, 1.1.8 | `src/pages/SetupUsernamePage.tsx` |
+| 1.4.7 | Add post-login redirect check in `AuthContext`: if no `users` row for `auth.uid()`, redirect to `/setup-username` | `[x]` | 1.4.6 | `hasProfile` check in AuthContext + ProtectedRoute |
+| 1.4.8 | Create `useCurrentUser` hook — TanStack Query wrapper for fetching current user's profile from `users` table | `[x]` | 1.4.3, 1.1.7, 1.2.1 | `src/hooks/useCurrentUser.ts` |
 
 ### 1.5 UI Shell & Routing
 
 | # | Task | Status | Depends On | Notes |
 |---|------|--------|------------|-------|
-| 1.5.1 | * Define route structure in `App.tsx`: `/login`, `/setup-username`, `/play`, `/profile`, `/leaderboard`, `/quiz/:quizId` | `[ ]` | 1.1.4 | Wrap protected routes with `<ProtectedRoute>` |
-| 1.5.2 | * Build `<BottomNav>` — 3 tabs (Profile, Play, Leaderboard); active tab highlighted; fixed bottom on mobile | `[ ]` | 1.1.6 | Use React Router `<NavLink>`, shadcn styling |
-| 1.5.3 | * Build `<AppShell>` layout — renders `<Outlet>` with `<BottomNav>` below; max-width container for desktop | `[ ]` | 1.5.2 | — |
-| 1.5.4 | Define global design tokens: primary colour, accent in `tailwind.config.ts` and CSS variables | `[ ]` | 1.1.5 | Bold, game-like palette; shadcn theming via CSS vars |
+| 1.5.1 | * Define route structure in `App.tsx`: `/login`, `/setup-username`, `/play`, `/profile`, `/leaderboard`, `/quiz/:quizId` | `[x]` | 1.1.4 | `src/App.tsx` — lazy-loaded routes with Suspense |
+| 1.5.2 | * Build `<BottomNav>` — 3 tabs (Profile, Play, Leaderboard); active tab highlighted; fixed bottom on mobile | `[x]` | 1.1.6 | `src/components/BottomNav.tsx` with Lucide icons |
+| 1.5.3 | * Build `<AppShell>` layout — renders `<Outlet>` with `<BottomNav>` below; max-width container for desktop | `[x]` | 1.5.2 | `src/components/AppShell.tsx` |
+| 1.5.4 | Define global design tokens: primary colour, accent in `tailwind.config.ts` and CSS variables | `[x]` | 1.1.5 | Purple primary via oklch in `src/index.css` |
 
 ---
 
@@ -174,9 +174,9 @@
 
 | # | Task | Status | Depends On | Notes |
 |---|------|--------|------------|-------|
-| 3.4.1 | * Build `<ProfilePage>` — Avatar, username, XP bar, streak counter, win/loss record using shadcn Card + Badge | `[ ]` | 1.4.8, 1.1.6 | Uses `useCurrentUser` hook |
-| 3.4.2 | Add `<XpProgressBar>` — visual bar showing XP within a tier (every 100 XP = 1 level) | `[ ]` | 3.4.1 | Cosmetic for demo |
-| 3.4.3 | Add streak display with flame icon — green if active, grey if 0 | `[ ]` | 3.4.1 | — |
+| 3.4.1 | * Build `<ProfilePage>` — Avatar, username, XP bar, streak counter, win/loss record using shadcn Card + Badge | `[x]` | 1.4.8, 1.1.6 | `src/pages/ProfilePage.tsx` |
+| 3.4.2 | Add `<XpProgressBar>` — visual bar showing XP within a tier (every 100 XP = 1 level) | `[x]` | 3.4.1 | Built into ProfilePage using shadcn Progress |
+| 3.4.3 | Add streak display with flame icon — green if active, grey if 0 | `[x]` | 3.4.1 | Flame icon from Lucide, orange when active |
 | 3.4.4 | Add recent activity section — last 5 quiz attempts with score and date via `supabase.from('quiz_attempts').select().order('completed_at', { ascending: false }).limit(5)` | `[ ]` | 3.4.1, 1.2.10 | Nice-to-have |
 | 3.4.5 | Embed `<TeamsSection>` and `<FriendRequests>` into `<ProfilePage>` | `[ ]` | 3.4.1, 3.3.2, 3.1.5 | — |
 
