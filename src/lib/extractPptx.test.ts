@@ -1,5 +1,48 @@
 import { extractPptxText } from './extractPptx';
 
+vi.mock('jszip', () => ({
+  default: {
+    loadAsync: async (file: File) => {
+      const text = await file.text();
+      if (!text.startsWith('PK')) {
+        throw new Error('Corrupted zip');
+      }
+      const name = file.name;
+      if (name.includes('empty')) {
+        return {
+          files: {
+            'ppt/slides/slide1.xml': {
+              async: () => '<p:sld></p:sld>',
+            },
+          },
+        };
+      }
+      if (name.includes('single')) {
+        return {
+          files: {
+            'ppt/slides/slide1.xml': {
+              async: () => '<p:sld><a:t>Slide 1 text</a:t></p:sld>',
+            },
+          },
+        };
+      }
+      if (name.includes('multi')) {
+        return {
+          files: {
+            'ppt/slides/slide1.xml': {
+              async: () => '<p:sld><a:t>Slide 1</a:t></p:sld>',
+            },
+            'ppt/slides/slide2.xml': {
+              async: () => '<p:sld><a:t>Slide 2</a:t></p:sld>',
+            },
+          },
+        };
+      }
+      return { files: {} };
+    },
+  },
+}));
+
 describe('extractPptxText', () => {
   beforeEach(() => {
     vi.clearAllMocks();

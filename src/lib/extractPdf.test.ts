@@ -1,5 +1,38 @@
 import { extractPdfText } from './extractPdf';
 
+vi.mock('pdfjs-dist', () => ({
+  GlobalWorkerOptions: { workerSrc: '' },
+  version: '0.0.0',
+  getDocument: ({ data }: { data: ArrayBuffer }) => {
+    const text = new TextDecoder().decode(data);
+    if (!text.startsWith('%PDF')) {
+      return { promise: Promise.reject(new Error('Invalid PDF')) };
+    }
+    if (text === '%PDF-1.4') {
+      return {
+        promise: Promise.resolve({
+          numPages: 1,
+          getPage: () =>
+            Promise.resolve({
+              getTextContent: () => Promise.resolve({ items: [] }),
+            }),
+        }),
+      };
+    }
+    const pages = text.includes('multi page') ? 2 : 1;
+    return {
+      promise: Promise.resolve({
+        numPages: pages,
+        getPage: (n: number) =>
+          Promise.resolve({
+            getTextContent: () =>
+              Promise.resolve({ items: [{ str: `page ${n} content` }] }),
+          }),
+      }),
+    };
+  },
+}));
+
 describe('extractPdfText', () => {
   beforeEach(() => {
     vi.clearAllMocks();
