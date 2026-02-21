@@ -33,7 +33,7 @@
 | 1.1.8 | * Install React Hook Form + Zod + resolver | `[x]` | 1.1.2 | `npm i react-hook-form zod @hookform/resolvers` |
 | 1.1.9 | * Set up `.env` file; add `.env` to `.gitignore` | `[x]` | 1.1.1 | Vars: `VITE_SUPABASE_URL`, `VITE_SUPABASE_ANON_KEY` |
 | 1.1.10 | * Create Supabase project, capture project URL and anon key | `[x]` | — | Also note service role key for Edge Functions |
-| 1.1.11 | Configure Vercel deployment: connect repo, set env vars | `[ ]` | 1.1.2, 1.1.10 | Single deployment target — no backend to deploy |
+| 1.1.11 | Configure Vercel deployment: connect repo, set env vars | `[x]` | 1.1.2, 1.1.10 | Single deployment target — no backend to deploy |
 | 1.1.12 | * Add top-level React `<ErrorBoundary>` component wrapping `<App>` | `[x]` | 1.1.2 | `src/components/ErrorBoundary.tsx` |
 
 ### 1.2 Database Schema
