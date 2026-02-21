@@ -4,7 +4,8 @@ import { Badge } from '@/components/ui/badge';
 export interface MaterialItem {
   id: string;
   title: string;
-  type: string;
+  source_type?: string;
+  type?: string;
   created_at: string;
   [key: string]: unknown;
 }
@@ -25,7 +26,7 @@ export function MaterialList({ materials }: Props) {
           <CardHeader className="pb-2">
             <div className="flex items-center justify-between">
               <CardTitle className="text-base">{m.title}</CardTitle>
-              <Badge variant="secondary">{m.type}</Badge>
+              <Badge variant="secondary">{m.source_type ?? m.type}</Badge>
             </div>
           </CardHeader>
           <CardContent>

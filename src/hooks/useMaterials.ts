@@ -6,7 +6,7 @@ export interface Material {
   id: string;
   owner_id: string;
   title: string;
-  type: 'pdf' | 'pptx' | 'text';
+  source_type: 'pdf' | 'pptx' | 'text';
   extracted_text: string;
   folder_id: string | null;
   file_url?: string | null;
@@ -33,7 +33,7 @@ export function useMaterials() {
 
 interface CreateMaterialInput {
   title: string;
-  type: 'pdf' | 'pptx' | 'text';
+  source_type: 'pdf' | 'pptx' | 'text';
   extracted_text: string;
   folder_id?: string | null;
   file_url?: string | null;

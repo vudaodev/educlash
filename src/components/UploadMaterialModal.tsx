@@ -52,7 +52,7 @@ export function UploadMaterialModal({ open, onOpenChange }: Props) {
     if (!title.trim() || !text.trim()) return;
     await createMaterial.mutateAsync({
       title: title.trim(),
-      type: fileType,
+      source_type: fileType,
       extracted_text: text.trim(),
     });
     setTitle('');
