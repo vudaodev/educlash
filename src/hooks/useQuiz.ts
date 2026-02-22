@@ -8,6 +8,7 @@ interface RawQuestion {
   question_text: string;
   options: string[];
   correct_option_index: number;
+  order: number;
 }
 
 export interface Question {
@@ -65,7 +66,9 @@ export function useQuiz(quizId: string) {
   const processed = useMemo(() => {
     if (!query.data) return undefined;
 
-    const rawQuestions = query.data.questions as RawQuestion[];
+    const rawQuestions = (query.data.questions as RawQuestion[]).sort(
+      (a, b) => a.order - b.order
+    );
     const answers: Record<string, number> = {};
     const strippedQuestions: Question[] = rawQuestions.map((q) => {
       answers[q.id] = q.correct_option_index;
