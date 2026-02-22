@@ -1,4 +1,7 @@
 import { useState, useEffect } from 'react';
+import { useForm } from 'react-hook-form';
+import { zodResolver } from '@hookform/resolvers/zod';
+import { z } from 'zod';
 import { toast } from 'sonner';
 import {
   Dialog,
@@ -9,31 +12,49 @@ import {
 } from '@/components/ui/dialog';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
+import { Label } from '@/components/ui/label';
 import { Badge } from '@/components/ui/badge';
 import { Skeleton } from '@/components/ui/skeleton';
-import { Search, Clock, Swords } from 'lucide-react';
+import { Search, Swords, CheckCircle2 } from 'lucide-react';
 import {
   useUserSearch,
-  useMyQuizzes,
   useSendChallenge,
   type ChallengeUser,
 } from '@/hooks/useChallenges';
+import { useMaterials } from '@/hooks/useMaterials';
+import { supabase } from '@/lib/supabase';
 
 interface SendChallengeFlowProps {
   open: boolean;
   onOpenChange: (open: boolean) => void;
 }
 
+const configSchema = z.object({
+  question_count: z.coerce.number().min(1).max(50),
+  time_limit_minutes: z.coerce.number().min(1).max(120),
+});
+
+type ConfigValues = z.output<typeof configSchema>;
+
 export function SendChallengeFlow({ open, onOpenChange }: SendChallengeFlowProps) {
-  const [step, setStep] = useState<'search' | 'pick-quiz'>('search');
+  const [step, setStep] = useState<'search' | 'materials' | 'config' | 'generating'>('search');
   const [searchQuery, setSearchQuery] = useState('');
   const [debouncedQuery, setDebouncedQuery] = useState('');
   const [selectedUser, setSelectedUser] = useState<ChallengeUser | null>(null);
+  const [selectedMaterials, setSelectedMaterials] = useState<string[]>([]);
 
   const { data: searchResults, isLoading: searching } =
     useUserSearch(debouncedQuery);
-  const { data: quizzes, isLoading: loadingQuizzes } = useMyQuizzes();
+  const { data: materials, isLoading: materialsLoading } = useMaterials();
   const sendChallenge = useSendChallenge();
+
+  const form = useForm<ConfigValues>({
+    resolver: zodResolver(configSchema) as never,
+    defaultValues: {
+      question_count: 10,
+      time_limit_minutes: 5,
+    },
+  });
 
   // Debounce search input
   useEffect(() => {
@@ -43,19 +64,45 @@ export function SendChallengeFlow({ open, onOpenChange }: SendChallengeFlowProps
 
   function handleSelectUser(user: ChallengeUser) {
     setSelectedUser(user);
-    setStep('pick-quiz');
+    setStep('materials');
   }
 
-  function handleSend(quizId: string) {
+  function toggleMaterial(id: string) {
+    setSelectedMaterials((prev) =>
+      prev.includes(id) ? prev.filter((m) => m !== id) : [...prev, id]
+    );
+  }
+
+  async function handleGenerate(values: ConfigValues) {
     if (!selectedUser) return;
+    setStep('generating');
+
+    const { data, error } = await supabase.functions.invoke('generate-quiz', {
+      body: {
+        material_ids: selectedMaterials,
+        question_count: values.question_count,
+        time_limit_minutes: values.time_limit_minutes,
+        mode: 'competitive',
+      },
+    });
+
+    if (error || !data?.quiz_id) {
+      setStep('config');
+      toast.error('Failed to generate quiz. Please try again.');
+      return;
+    }
+
     sendChallenge.mutate(
-      { quizId, challengedId: selectedUser.id },
+      { quizId: data.quiz_id, challengedId: selectedUser.id },
       {
         onSuccess: () => {
           toast.success(`Challenge sent to ${selectedUser.username}!`);
           handleClose();
         },
-        onError: () => toast.error('Failed to send challenge'),
+        onError: () => {
+          toast.error('Failed to send challenge');
+          handleClose();
+        },
       }
     );
   }
@@ -66,7 +113,16 @@ export function SendChallengeFlow({ open, onOpenChange }: SendChallengeFlowProps
     setSearchQuery('');
     setDebouncedQuery('');
     setSelectedUser(null);
+    setSelectedMaterials([]);
+    form.reset();
   }
+
+  const stepDescription = {
+    search: 'Search for a player to challenge.',
+    materials: `Select materials to generate a quiz for ${selectedUser?.username}.`,
+    config: 'Configure your quiz settings.',
+    generating: 'Generating quiz and sending challenge...',
+  };
 
   return (
     <Dialog open={open} onOpenChange={(val) => (val ? onOpenChange(true) : handleClose())}>
@@ -76,11 +132,7 @@ export function SendChallengeFlow({ open, onOpenChange }: SendChallengeFlowProps
             <Swords className="mr-2 inline size-5" />
             Send Challenge
           </DialogTitle>
-          <DialogDescription>
-            {step === 'search'
-              ? 'Search for a player to challenge.'
-              : `Pick a quiz to challenge ${selectedUser?.username}.`}
-          </DialogDescription>
+          <DialogDescription>{stepDescription[step]}</DialogDescription>
         </DialogHeader>
 
         {step === 'search' && (
@@ -126,7 +178,7 @@ export function SendChallengeFlow({ open, onOpenChange }: SendChallengeFlowProps
           </div>
         )}
 
-        {step === 'pick-quiz' && (
+        {step === 'materials' && (
           <div className="flex flex-col gap-3">
             <Button
               variant="ghost"
@@ -137,39 +189,94 @@ export function SendChallengeFlow({ open, onOpenChange }: SendChallengeFlowProps
               &larr; Back
             </Button>
 
-            {loadingQuizzes && (
+            {materialsLoading ? (
               <div className="flex flex-col gap-2">
-                <Skeleton className="h-14 w-full" />
-                <Skeleton className="h-14 w-full" />
+                <Skeleton className="h-10 w-full" />
+                <Skeleton className="h-10 w-full" />
+              </div>
+            ) : (
+              <div className="flex flex-col gap-2">
+                {materials?.map((mat) => (
+                  <button
+                    key={mat.id}
+                    type="button"
+                    onClick={() => toggleMaterial(mat.id)}
+                    className={`flex items-center justify-between rounded-lg border p-3 text-left transition-colors ${
+                      selectedMaterials.includes(mat.id)
+                        ? 'border-primary bg-primary/5'
+                        : 'hover:bg-muted'
+                    }`}
+                  >
+                    <span>{mat.title}</span>
+                    {selectedMaterials.includes(mat.id) && (
+                      <CheckCircle2 className="text-primary size-5" />
+                    )}
+                  </button>
+                ))}
               </div>
             )}
 
-            {quizzes && quizzes.length === 0 && (
-              <p className="text-muted-foreground text-center text-sm">
-                No quizzes yet. Create one first!
-              </p>
-            )}
+            <Button
+              onClick={() => setStep('config')}
+              disabled={selectedMaterials.length === 0}
+            >
+              Next
+            </Button>
+          </div>
+        )}
 
-            {quizzes?.map((q) => (
-              <button
-                key={q.id}
-                type="button"
-                onClick={() => handleSend(q.id)}
-                disabled={sendChallenge.isPending}
-                className="hover:bg-muted flex items-center justify-between rounded-lg border p-3 text-left transition-colors disabled:opacity-50"
-              >
-                <div>
-                  <p className="font-medium">
-                    {q.question_count} questions
-                  </p>
-                  <p className="text-muted-foreground flex items-center gap-1 text-sm">
-                    <Clock className="size-3" />
-                    {q.time_limit_minutes} min
-                  </p>
-                </div>
-                <Badge>{q.mode}</Badge>
-              </button>
-            ))}
+        {step === 'config' && (
+          <form
+            onSubmit={form.handleSubmit(handleGenerate)}
+            className="flex flex-col gap-4"
+          >
+            <Button
+              type="button"
+              variant="ghost"
+              size="sm"
+              className="self-start"
+              onClick={() => setStep('materials')}
+            >
+              &larr; Back
+            </Button>
+
+            <div className="flex flex-col gap-2">
+              <Label htmlFor="question_count">Number of Questions</Label>
+              <Input
+                id="question_count"
+                type="number"
+                {...form.register('question_count')}
+              />
+              {form.formState.errors.question_count && (
+                <p className="text-destructive text-sm">
+                  {form.formState.errors.question_count.message}
+                </p>
+              )}
+            </div>
+
+            <div className="flex flex-col gap-2">
+              <Label htmlFor="time_limit_minutes">Time Limit (minutes)</Label>
+              <Input
+                id="time_limit_minutes"
+                type="number"
+                {...form.register('time_limit_minutes')}
+              />
+              {form.formState.errors.time_limit_minutes && (
+                <p className="text-destructive text-sm">
+                  {form.formState.errors.time_limit_minutes.message}
+                </p>
+              )}
+            </div>
+
+            <Button type="submit">Generate & Send Challenge</Button>
+          </form>
+        )}
+
+        {step === 'generating' && (
+          <div className="flex flex-col gap-3">
+            <Skeleton className="h-6 w-3/4" />
+            <Skeleton className="h-6 w-1/2" />
+            <Skeleton className="h-6 w-2/3" />
           </div>
         )}
       </DialogContent>
