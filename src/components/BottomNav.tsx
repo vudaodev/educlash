@@ -16,6 +16,7 @@ export function BottomNav() {
           <NavLink
             key={to}
             to={to}
+            onClick={() => window.scrollTo(0, 0)}
             className={({ isActive }) =>
               `flex flex-1 flex-col items-center gap-1 py-3 text-xs transition-colors ${
                 isActive
