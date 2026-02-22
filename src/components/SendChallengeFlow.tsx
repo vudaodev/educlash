@@ -27,6 +27,7 @@ import { supabase } from '@/lib/supabase';
 interface SendChallengeFlowProps {
   open: boolean;
   onOpenChange: (open: boolean) => void;
+  initialUser?: ChallengeUser;
 }
 
 const configSchema = z.object({
@@ -36,7 +37,7 @@ const configSchema = z.object({
 
 type ConfigValues = z.output<typeof configSchema>;
 
-export function SendChallengeFlow({ open, onOpenChange }: SendChallengeFlowProps) {
+export function SendChallengeFlow({ open, onOpenChange, initialUser }: SendChallengeFlowProps) {
   const [step, setStep] = useState<'search' | 'materials' | 'config' | 'generating'>('search');
   const [searchQuery, setSearchQuery] = useState('');
   const [debouncedQuery, setDebouncedQuery] = useState('');
@@ -55,6 +56,14 @@ export function SendChallengeFlow({ open, onOpenChange }: SendChallengeFlowProps
       time_limit_minutes: 5,
     },
   });
+
+  // Skip to materials step when an initial user is provided
+  useEffect(() => {
+    if (open && initialUser) {
+      setSelectedUser(initialUser);
+      setStep('materials');
+    }
+  }, [open, initialUser]);
 
   // Debounce search input
   useEffect(() => {

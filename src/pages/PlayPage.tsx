@@ -9,7 +9,7 @@ import { FolderView } from '@/components/FolderView';
 import { PendingChallenges } from '@/components/PendingChallenges';
 import { SendChallengeFlow } from '@/components/SendChallengeFlow';
 import { UserSearchResult } from '@/components/UserSearchResult';
-import { useUserSearch } from '@/hooks/useChallenges';
+import { useUserSearch, type ChallengeUser } from '@/hooks/useChallenges';
 import { useFriends, useSendFriendRequest, type Friendship } from '@/hooks/useFriends';
 import { useAuth } from '@/contexts/AuthContext';
 import { toast } from 'sonner';
@@ -35,6 +35,7 @@ export default function PlayPage() {
   const [uploadOpen, setUploadOpen] = useState(false);
   const [quizOpen, setQuizOpen] = useState(false);
   const [challengeOpen, setChallengeOpen] = useState(false);
+  const [challengeUser, setChallengeUser] = useState<ChallengeUser | null>(null);
   const [searchQuery, setSearchQuery] = useState('');
   const [debouncedQuery, setDebouncedQuery] = useState('');
 
@@ -54,7 +55,9 @@ export default function PlayPage() {
     });
   }
 
-  function handleChallenge(_userId: string) {
+  function handleChallenge(userId: string) {
+    const match = searchResults?.find((u) => u.id === userId) ?? null;
+    setChallengeUser(match);
     setChallengeOpen(true);
   }
 
@@ -119,7 +122,14 @@ export default function PlayPage() {
 
       <UploadMaterialModal open={uploadOpen} onOpenChange={setUploadOpen} />
       <CreateQuizModal open={quizOpen} onOpenChange={setQuizOpen} onQuizCreated={(id) => navigate(`/quiz/${id}`)} />
-      <SendChallengeFlow open={challengeOpen} onOpenChange={setChallengeOpen} />
+      <SendChallengeFlow
+        open={challengeOpen}
+        onOpenChange={(val) => {
+          setChallengeOpen(val);
+          if (!val) setChallengeUser(null);
+        }}
+        initialUser={challengeUser ?? undefined}
+      />
     </div>
   );
 }
