@@ -9,6 +9,7 @@ const SetupUsernamePage = lazy(() => import('./pages/SetupUsernamePage'));
 const PlayPage = lazy(() => import('./pages/PlayPage'));
 const ProfilePage = lazy(() => import('./pages/ProfilePage'));
 const LeaderboardPage = lazy(() => import('./pages/LeaderboardPage'));
+const QuizPlayer = lazy(() => import('./pages/QuizPlayer'));
 
 export default function App() {
   return (
@@ -39,6 +40,16 @@ export default function App() {
           <Route path="/profile" element={<ProfilePage />} />
           <Route path="/leaderboard" element={<LeaderboardPage />} />
         </Route>
+
+        {/* Quiz player (no bottom nav) */}
+        <Route
+          path="/quiz/:quizId"
+          element={
+            <ProtectedRoute>
+              <QuizPlayer />
+            </ProtectedRoute>
+          }
+        />
 
         {/* Default redirect */}
         <Route path="*" element={<Navigate to="/play" replace />} />
