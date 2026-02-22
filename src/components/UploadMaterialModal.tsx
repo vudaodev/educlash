@@ -86,7 +86,7 @@ export function UploadMaterialModal({ open, onOpenChange }: Props) {
                 onChange={(e) => setTitle(e.target.value)}
               />
             </div>
-            <input
+            <Input
               type="file"
               accept=".pdf,.pptx"
               onChange={handleFileChange}
