@@ -18,7 +18,7 @@ export function BottomNav() {
             to={to}
             onClick={() => window.scrollTo(0, 0)}
             className={({ isActive }) =>
-              `flex flex-1 flex-col items-center gap-1 py-3 text-xs transition-colors ${
+              `flex flex-1 flex-col items-center gap-1 py-4 text-xs transition-colors border-r border-border last:border-r-0 ${
                 isActive
                   ? 'text-primary font-semibold'
                   : 'text-muted-foreground'
