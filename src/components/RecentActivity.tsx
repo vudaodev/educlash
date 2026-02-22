@@ -37,7 +37,16 @@ export function RecentActivity() {
     );
   }
 
-  if (!attempts || attempts.length === 0) return null;
+  if (!attempts || attempts.length === 0) {
+    return (
+      <div className="flex flex-col gap-2">
+        <h3 className="text-sm font-semibold">Recent Activity</h3>
+        <p className="py-4 text-center text-sm text-muted-foreground">
+          Play your first quiz to see stats here!
+        </p>
+      </div>
+    );
+  }
 
   const total = attempts.length;
   const challenges = attempts.filter((a) => a.challenge_id);

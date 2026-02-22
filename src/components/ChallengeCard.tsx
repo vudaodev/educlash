@@ -56,9 +56,9 @@ export function ChallengeCard({
   return (
     <div className="flex flex-col gap-2 rounded-lg border p-3">
       <div className="flex items-center justify-between">
-        <div className="flex items-center gap-2">
-          <Swords className="text-primary size-4" />
-          <span className="font-medium">{opponent.username}</span>
+        <div className="flex min-w-0 items-center gap-2">
+          <Swords className="text-primary size-4 shrink-0" />
+          <span className="truncate font-medium">{opponent.username}</span>
         </div>
         {statusBadge(challenge.status)}
       </div>

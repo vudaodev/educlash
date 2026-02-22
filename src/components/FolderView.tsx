@@ -27,6 +27,14 @@ export function FolderView() {
     materials: allMaterials.filter((m) => m.folder_id === folder.id),
   }));
 
+  if (allMaterials.length === 0) {
+    return (
+      <p className="py-8 text-center text-muted-foreground">
+        Upload your first slides to get started!
+      </p>
+    );
+  }
+
   return (
     <div className="space-y-6">
       {folderGroups.map(({ folder, materials: folderMaterials }) => (

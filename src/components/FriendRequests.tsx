@@ -41,14 +41,14 @@ export function FriendRequests() {
           key={f.id}
           className="flex items-center justify-between rounded-lg border p-3"
         >
-          <div className="flex items-center gap-3">
-            <Avatar className="h-8 w-8">
+          <div className="flex min-w-0 flex-1 items-center gap-3">
+            <Avatar className="h-8 w-8 shrink-0">
               <AvatarImage src={f.user.avatar_url ?? undefined} />
               <AvatarFallback className="text-xs">
                 {f.user.username[0].toUpperCase()}
               </AvatarFallback>
             </Avatar>
-            <span className="font-medium">{f.user.username}</span>
+            <span className="truncate font-medium">{f.user.username}</span>
           </div>
           <Button
             size="sm"
