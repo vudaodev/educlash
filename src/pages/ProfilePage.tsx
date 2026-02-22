@@ -58,19 +58,25 @@ export default function ProfilePage() {
       <Card className="md:hidden">
         <CardContent className="flex justify-around pt-2 pb-2">
           <div className="flex flex-col items-center">
-            <Flame
-              className={`h-6 w-6 ${profile.current_streak > 0 ? 'text-orange-500' : 'text-muted-foreground'}`}
-            />
+            <div className="flex h-8 items-center justify-center">
+              <Flame
+                className={`h-6 w-6 ${profile.current_streak > 0 ? 'text-orange-500' : 'text-muted-foreground'}`}
+              />
+            </div>
             <span className="text-lg font-bold">{profile.current_streak}</span>
             <span className="text-xs text-muted-foreground">Streak</span>
           </div>
           <div className="flex flex-col items-center">
-            <span className="text-2xl">👑</span>
+            <div className="flex h-8 items-center justify-center">
+              <span className="text-2xl leading-none">👑</span>
+            </div>
             <span className="text-lg font-bold text-green-600">{profile.wins}</span>
             <span className="text-xs text-muted-foreground">Wins</span>
           </div>
           <div className="flex flex-col items-center">
-            <span className="text-2xl">😢</span>
+            <div className="flex h-8 items-center justify-center">
+              <span className="text-2xl leading-none">😢</span>
+            </div>
             <span className="text-lg font-bold text-destructive">{profile.losses}</span>
             <span className="text-xs text-muted-foreground">Losses</span>
           </div>
@@ -81,23 +87,29 @@ export default function ProfilePage() {
       <div className="hidden md:grid md:grid-cols-3 md:gap-2">
         <Card>
           <CardContent className="flex flex-col items-center pt-2 pb-2">
-            <Flame
-              className={`h-6 w-6 ${profile.current_streak > 0 ? 'text-orange-500' : 'text-muted-foreground'}`}
-            />
+            <div className="flex h-8 items-center justify-center">
+              <Flame
+                className={`h-6 w-6 ${profile.current_streak > 0 ? 'text-orange-500' : 'text-muted-foreground'}`}
+              />
+            </div>
             <span className="text-lg font-bold">{profile.current_streak}</span>
             <span className="text-xs text-muted-foreground">Streak</span>
           </CardContent>
         </Card>
         <Card>
           <CardContent className="flex flex-col items-center pt-2 pb-2">
-            <span className="text-2xl">👑</span>
+            <div className="flex h-8 items-center justify-center">
+              <span className="text-2xl leading-none">👑</span>
+            </div>
             <span className="text-lg font-bold text-green-600">{profile.wins}</span>
             <span className="text-xs text-muted-foreground">Wins</span>
           </CardContent>
         </Card>
         <Card>
           <CardContent className="flex flex-col items-center pt-2 pb-2">
-            <span className="text-2xl">😢</span>
+            <div className="flex h-8 items-center justify-center">
+              <span className="text-2xl leading-none">😢</span>
+            </div>
             <span className="text-lg font-bold text-destructive">{profile.losses}</span>
             <span className="text-xs text-muted-foreground">Losses</span>
           </CardContent>
