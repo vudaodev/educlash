@@ -8,6 +8,7 @@ import { useAuth } from '@/contexts/AuthContext';
 import { Button } from '@/components/ui/button';
 import { Flame } from 'lucide-react';
 import { FriendRequests } from '@/components/FriendRequests';
+import { TeamsSection } from '@/components/TeamsSection';
 
 export default function ProfilePage() {
   const { data: profile, isLoading } = useCurrentUser();
@@ -77,6 +78,8 @@ export default function ProfilePage() {
       </div>
 
       <FriendRequests />
+
+      <TeamsSection />
 
       <Button variant="outline" onClick={signOut}>
         Sign out
