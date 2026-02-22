@@ -215,6 +215,7 @@
 | 4.2.3 | Ensure mobile-responsive at 375px viewport; fix overflow/layout issues      | `[x]`  | Phase 3      | Truncate + shrink fixes on PlayPage, ChallengeCard, FriendRequests |
 | 4.2.4 | Add EduClash logo/wordmark to login page and app header                     | `[x]`  | 1.4.5, 1.5.3 | Sticky header with text wordmark in AppShell             |
 | 4.2.5 | Review and unify spacing, font weights across the app                       | `[x]`  | Phase 3      | All pages use consistent px-4 pb-24 pt-6 padding         |
+| 4.2.6 | Fix BottomNav jumping on mobile scroll (dvh + interactive-widget viewport)  | `[x]`  | 1.5.2        | 100dvh on body + interactive-widget=resizes-content      |
 
 ### 4.3 Bug Fixes & Hardening
 
