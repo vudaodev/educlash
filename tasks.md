@@ -164,11 +164,11 @@
 
 | #     | Task                                                                                                                                                | Status | Depends On                 | Notes                                            |
 | ----- | --------------------------------------------------------------------------------------------------------------------------------------------------- | ------ | -------------------------- | ------------------------------------------------ |
-| 3.3.1 | _ Create `useTeams` hook — TanStack Query: fetch user's teams via `supabase.from('team_members').select('_, teams(\*)')`, mutations for create/join | `[ ]`  | 1.1.7, 1.4.1, 1.2.3, 1.2.4 | Team creation calls `generate_invite_code()` RPC |
-| 3.3.2 | Build `<TeamsSection>` in Profile tab — list teams, "Create Team" and "Join Team" buttons                                                           | `[ ]`  | 3.3.1, 1.1.6               | —                                                |
-| 3.3.3 | Build `<CreateTeamModal>` — shadcn Dialog, name input via React Hook Form, submit, show generated invite code with copy button                      | `[ ]`  | 3.3.1, 1.1.6, 1.1.8, 1.3.4 | —                                                |
-| 3.3.4 | Build `<JoinTeamModal>` — shadcn Dialog, invite code input, submit, success/error Toast                                                             | `[ ]`  | 3.3.1, 1.1.6               | —                                                |
-| 3.3.5 | Build `<TeamDetailView>` — team name, invite code with copy, member list with Avatars                                                               | `[ ]`  | 3.3.1, 1.1.6               | —                                                |
+| 3.3.1 | _ Create `useTeams` hook — TanStack Query: fetch user's teams via `supabase.from('team_members').select('_, teams(\*)')`, mutations for create/join | `[x]`  | 1.1.7, 1.4.1, 1.2.3, 1.2.4 | `src/hooks/useTeams.ts` — useTeams, useTeamMembers, useCreateTeam, useJoinTeam. Fixed RLS: `team_members_select` needed SECURITY DEFINER helper to avoid self-referencing recursion; `teams_select` opened to all authenticated users for invite code lookup |
+| 3.3.2 | Build `<TeamsSection>` in Profile tab — list teams, "Create Team" and "Join Team" buttons                                                           | `[x]`  | 3.3.1, 1.1.6               | `src/components/TeamsSection.tsx` — expandable team list with chevron toggle |
+| 3.3.3 | Build `<CreateTeamModal>` — shadcn Dialog, name input via React Hook Form, submit, show generated invite code with copy button                      | `[x]`  | 3.3.1, 1.1.6, 1.1.8, 1.3.4 | `src/components/CreateTeamModal.tsx` — shows invite code with copy button on success |
+| 3.3.4 | Build `<JoinTeamModal>` — shadcn Dialog, invite code input, submit, success/error Toast                                                             | `[x]`  | 3.3.1, 1.1.6               | `src/components/JoinTeamModal.tsx` — 6-char uppercased input |
+| 3.3.5 | Build `<TeamDetailView>` — team name, invite code with copy, member list with Avatars                                                               | `[x]`  | 3.3.1, 1.1.6               | `src/components/TeamDetailView.tsx` — inline expandable view with owner badge |
 
 ### 3.4 Profile Page
 
@@ -178,7 +178,7 @@
 | 3.4.2 | Add `<XpProgressBar>` — visual bar showing XP within a tier (every 100 XP = 1 level)                                                                                      | `[x]`  | 3.4.1               | Built into ProfilePage using shadcn Progress |
 | 3.4.3 | Add streak display with flame icon — green if active, grey if 0                                                                                                           | `[x]`  | 3.4.1               | Flame icon from Lucide, orange when active   |
 | 3.4.4 | Add recent activity section — last 5 quiz attempts with score and date via `supabase.from('quiz_attempts').select().order('completed_at', { ascending: false }).limit(5)` | `[ ]`  | 3.4.1, 1.2.10       | Nice-to-have                                 |
-| 3.4.5 | Embed `<TeamsSection>` and `<FriendRequests>` into `<ProfilePage>`                                                                                                        | `[ ]`  | 3.4.1, 3.3.2, 3.1.5 | —                                            |
+| 3.4.5 | Embed `<TeamsSection>` and `<FriendRequests>` into `<ProfilePage>`                                                                                                        | `[x]`  | 3.4.1, 3.3.2, 3.1.5 | Both integrated in ProfilePage between stats and sign out |
 
 ### 3.5 Play Tab Composition
 
