@@ -177,7 +177,7 @@
 | 3.4.1 | \* Build `<ProfilePage>` — Avatar, username, XP bar, streak counter, win/loss record using shadcn Card + Badge                                                            | `[x]`  | 1.4.8, 1.1.6        | `src/pages/ProfilePage.tsx`                  |
 | 3.4.2 | Add `<XpProgressBar>` — visual bar showing XP within a tier (every 100 XP = 1 level)                                                                                      | `[x]`  | 3.4.1               | Built into ProfilePage using shadcn Progress |
 | 3.4.3 | Add streak display with flame icon — green if active, grey if 0                                                                                                           | `[x]`  | 3.4.1               | Flame icon from Lucide, orange when active   |
-| 3.4.4 | Add recent activity section — last 5 quiz attempts with score and date via `supabase.from('quiz_attempts').select().order('completed_at', { ascending: false }).limit(5)` | `[ ]`  | 3.4.1, 1.2.10       | Nice-to-have                                 |
+| 3.4.4 | Add recent activity section — last 5 quiz attempts with score and date via `supabase.from('quiz_attempts').select().order('completed_at', { ascending: false }).limit(5)` | `[x]`  | 3.4.1, 1.2.10       | `src/components/RecentActivity.tsx` — compact summary: avg score %, solo/1v1 count, correct answers |
 | 3.4.5 | Embed `<TeamsSection>` and `<FriendRequests>` into `<ProfilePage>`                                                                                                        | `[x]`  | 3.4.1, 3.3.2, 3.1.5 | Both integrated in ProfilePage between stats and sign out |
 
 ### 3.5 Play Tab Composition
