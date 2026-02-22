@@ -1,9 +1,10 @@
 import { NavLink } from 'react-router-dom';
-import { User, Swords, Trophy } from 'lucide-react';
+import { User, Swords, Users, Trophy } from 'lucide-react';
 
 const tabs = [
   { to: '/profile', icon: User, label: 'Profile' },
   { to: '/play', icon: Swords, label: 'Play' },
+  { to: '/teams', icon: Users, label: 'Teams' },
   { to: '/leaderboard', icon: Trophy, label: 'Leaderboard' },
 ] as const;
 

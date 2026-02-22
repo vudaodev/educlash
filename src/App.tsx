@@ -9,6 +9,7 @@ const SetupUsernamePage = lazy(() => import('./pages/SetupUsernamePage'));
 const PlayPage = lazy(() => import('./pages/PlayPage'));
 const ProfilePage = lazy(() => import('./pages/ProfilePage'));
 const LeaderboardPage = lazy(() => import('./pages/LeaderboardPage'));
+const TeamsPage = lazy(() => import('./pages/TeamsPage'));
 const QuizPlayer = lazy(() => import('./pages/QuizPlayer'));
 
 export default function App() {
@@ -38,6 +39,7 @@ export default function App() {
         >
           <Route path="/play" element={<PlayPage />} />
           <Route path="/profile" element={<ProfilePage />} />
+          <Route path="/teams" element={<TeamsPage />} />
           <Route path="/leaderboard" element={<LeaderboardPage />} />
         </Route>
 
