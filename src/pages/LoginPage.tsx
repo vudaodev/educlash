@@ -1,7 +1,6 @@
 import { Navigate } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
 import { useAuth } from '@/contexts/AuthContext';
-import logoImg from '@/assets/educlashlogo.png';
 
 export default function LoginPage() {
   const { user, loading, signInWithGoogle } = useAuth();
@@ -12,7 +11,9 @@ export default function LoginPage() {
   return (
     <div className="flex h-screen flex-col items-center justify-center gap-8 px-4">
       <div className="flex flex-col items-center gap-2">
-        <img src={logoImg} alt="EduClash" className="h-24 object-contain" />
+        <h1 className="text-4xl font-extrabold tracking-tight">
+          <span className="text-primary">Edu</span>Clash
+        </h1>
         <p className="text-muted-foreground text-center">
           Turn your lectures into battles. Quiz your friends. Climb the leaderboard.
         </p>
