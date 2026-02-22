@@ -184,7 +184,7 @@
 
 | #     | Task                                                                                                         | Status | Depends On                 | Notes                               |
 | ----- | ------------------------------------------------------------------------------------------------------------ | ------ | -------------------------- | ----------------------------------- |
-| 3.5.1 | Build `<PlayPage>` — compose: `<UserSearchBar>`, `<PendingChallenges>`, "Create Quiz" button, `<FolderView>` | `[~]`  | 2.4.5, 3.1.3, 2.1.8, 2.2.4 | Challenges + FolderView + Upload wired in; needs UserSearchBar |
+| 3.5.1 | Build `<PlayPage>` — compose: `<UserSearchBar>`, `<PendingChallenges>`, "Create Quiz" button, `<FolderView>` | `[x]`  | 2.4.5, 3.1.3, 2.1.8, 2.2.4 | All components composed: search, challenges, folders, modals |
 | 3.5.2 | Add "Create Quiz" FAB on Play tab — opens `<CreateQuizModal>`                                                | `[x]`  | 3.5.1, 2.2.4               | Placed as header button (not FAB); functional      |
 | 3.5.3 | Add "Upload Material" button in Play tab header — opens `<UploadMaterialModal>`                              | `[x]`  | 3.5.1, 2.1.4               | —                                                 |
 
