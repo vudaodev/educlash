@@ -44,6 +44,9 @@ export function UploadMaterialModal({ open, onOpenChange }: Props) {
       }
       setText(extracted);
       if (!title) setTitle(file.name.replace(/\.[^.]+$/, ''));
+    } catch (err) {
+      console.error('Extraction failed:', err);
+      setText('');
     } finally {
       setExtracting(false);
     }
