@@ -54,7 +54,29 @@ export default function ProfilePage() {
         </CardContent>
       </Card>
 
-      <div className="grid grid-cols-3 gap-2">
+      {/* Mobile: single card with all 3 stats */}
+      <Card className="md:hidden">
+        <CardContent className="flex justify-around pt-2 pb-2">
+          <div className="flex flex-col items-center">
+            <Flame
+              className={`h-6 w-6 ${profile.current_streak > 0 ? 'text-orange-500' : 'text-muted-foreground'}`}
+            />
+            <span className="text-lg font-bold">{profile.current_streak}</span>
+            <span className="text-xs text-muted-foreground">Streak</span>
+          </div>
+          <div className="flex flex-col items-center">
+            <span className="text-lg font-bold text-green-600">{profile.wins}</span>
+            <span className="text-xs text-muted-foreground">Wins</span>
+          </div>
+          <div className="flex flex-col items-center">
+            <span className="text-lg font-bold text-destructive">{profile.losses}</span>
+            <span className="text-xs text-muted-foreground">Losses</span>
+          </div>
+        </CardContent>
+      </Card>
+
+      {/* Desktop: 3 separate cards */}
+      <div className="hidden md:grid md:grid-cols-3 md:gap-2">
         <Card>
           <CardContent className="flex flex-col items-center pt-2 pb-2">
             <Flame
