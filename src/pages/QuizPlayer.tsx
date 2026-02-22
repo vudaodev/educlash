@@ -8,6 +8,7 @@ import { Button } from '@/components/ui/button';
 import { Progress } from '@/components/ui/progress';
 import { Skeleton } from '@/components/ui/skeleton';
 import { supabase } from '@/lib/supabase';
+import { toast } from 'sonner';
 
 function formatTime(seconds: number): string {
   const mins = Math.floor(seconds / 60);
@@ -84,6 +85,10 @@ export default function QuizPlayer() {
         time_taken_seconds: timeTaken,
         xp_earned: data.xp_earned,
       });
+
+      if (data.xp_earned > 0) {
+        toast.success(`+${data.xp_earned} XP earned!`);
+      }
 
       // If challenge completed (both players done), capture result
       if (data.challenge_result?.winner_id) {

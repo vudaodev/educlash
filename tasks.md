@@ -121,7 +121,7 @@
 | 2.3.4 | Build `<QuizResult>` — score, time taken, XP earned (from RPC response), per-question breakdown with correct answer highlighted                                                                         | `[x]`  | 2.3.3, 1.1.6               | `src/components/QuizResult.tsx` with CTAs     |
 | 2.3.5 | Wire auto-submit: timer hits 0 → submit with answers given so far                                                                                                                                       | `[x]`  | 2.3.2                      | Deadline-based setTimeout in QuizPlayer       |
 | 2.3.6 | Add progress indicator — "Question 3 of 20" with progress bar                                                                                                                                           | `[x]`  | 2.3.2                      | shadcn Progress bar + "Question X of Y" text  |
-| 2.3.7 | Show XP earned as animated Toast after quiz submit                                                                                                                                                      | `[ ]`  | 2.3.4                      | XP shown in results page but no Toast yet     |
+| 2.3.7 | Show XP earned as animated Toast after quiz submit                                                                                                                                                      | `[x]`  | 2.3.4                      | `toast.success('+X XP earned!')` in QuizPlayer after submit |
 
 ### 2.4 1v1 Challenge Flow
 
