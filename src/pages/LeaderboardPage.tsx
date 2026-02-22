@@ -1,5 +1,5 @@
 import { useMemo, useState } from 'react';
-import { useLeaderboard, type LeaderboardEntry } from '@/hooks/useLeaderboard';
+import { useLeaderboard, useHeadToHead, type LeaderboardEntry } from '@/hooks/useLeaderboard';
 import { useAuth } from '@/contexts/AuthContext';
 import { Tabs, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Card, CardContent } from '@/components/ui/card';
@@ -29,6 +29,7 @@ function getStatValue(entry: LeaderboardEntry, sortKey: SortKey) {
 export default function LeaderboardPage() {
   const { user } = useAuth();
   const { data: entries, isLoading } = useLeaderboard();
+  const { data: h2hRecords } = useHeadToHead();
   const [sortKey, setSortKey] = useState<SortKey>('xp');
 
   const sorted = useMemo(() => {
@@ -110,6 +111,11 @@ export default function LeaderboardPage() {
                     </p>
                     <p className="text-xs text-muted-foreground">
                       {entry.wins}W / {entry.losses}L
+                      {!isCurrentUser && h2hRecords?.[entry.id] && (
+                        <span className="ml-1.5">
+                          · H2H {h2hRecords[entry.id].wins}-{h2hRecords[entry.id].losses}
+                        </span>
+                      )}
                     </p>
                   </div>
                   <span className="text-sm font-semibold">

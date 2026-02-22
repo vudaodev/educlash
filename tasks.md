@@ -158,7 +158,7 @@
 | 3.2.1 | \* Create `useLeaderboard` hook — TanStack Query: fetch friends + self from `users` table, ordered by XP desc; compute rank client-side | `[x]`  | 1.1.7, 3.1.2         | `src/hooks/useLeaderboard.ts` — two-step: useFriends for IDs, then fetch full profiles |
 | 3.2.2 | Build `<Leaderboard>` page — rank, Avatar, username, XP, streak, W/L; current user highlighted; using shadcn Card + Badge               | `[x]`  | 3.2.1, 1.1.6         | `src/pages/LeaderboardPage.tsx` — medal emojis for top 3, current user highlighted     |
 | 3.2.3 | Add sort Tabs: "XP", "Streak", "Wins" — client-side re-sort                                                                             | `[x]`  | 3.2.2                | Built into LeaderboardPage with shadcn Tabs + useMemo sort                              |
-| 3.2.4 | Add head-to-head record per friend (W/L against that friend)                                                                            | `[ ]`  | 3.2.2, 1.2.10, 1.2.9 | Nice-to-have                                             |
+| 3.2.4 | Add head-to-head record per friend (W/L against that friend)                                                                            | `[x]`  | 3.2.2, 1.2.10, 1.2.9 | `useHeadToHead` hook computes W/L from completed challenges; shown inline on leaderboard rows |
 
 ### 3.3 Teams
 
