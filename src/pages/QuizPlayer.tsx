@@ -62,7 +62,7 @@ export default function QuizPlayer() {
 
     if (!error && data) {
       setResult({
-        score: data.score,
+        score: data.correct_count,
         total: quiz.questions.length,
         time_taken_seconds: timeTaken,
         xp_earned: data.xp_earned,
