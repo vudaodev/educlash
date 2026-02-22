@@ -42,19 +42,22 @@ export function RecentActivity() {
   const total = attempts.length;
   const challenges = attempts.filter((a) => a.challenge_id);
   const solo = total - challenges.length;
-  const totalScore = attempts.reduce((sum, a) => sum + a.score, 0);
+  const avgPct = Math.round(attempts.reduce((sum, a) => sum + a.score, 0) / total);
   const totalQuestions = attempts.reduce(
     (sum, a) => sum + (a.quizzes?.question_count ?? 0),
     0
   );
-  const pct = totalQuestions > 0 ? Math.round((totalScore / totalQuestions) * 100) : 0;
+  const totalCorrect = attempts.reduce(
+    (sum, a) => sum + Math.round((a.score / 100) * (a.quizzes?.question_count ?? 0)),
+    0
+  );
 
   return (
     <div className="flex flex-col gap-2">
       <h3 className="text-sm font-semibold">Last {total} Games</h3>
       <div className="flex items-center justify-between rounded-lg border p-3">
         <div className="flex flex-col">
-          <span className="text-lg font-bold">{pct}%</span>
+          <span className="text-lg font-bold">{avgPct}%</span>
           <span className="text-xs text-muted-foreground">Avg score</span>
         </div>
         <div className="flex gap-4 text-center">
@@ -67,7 +70,7 @@ export function RecentActivity() {
             <span className="text-xs text-muted-foreground">1v1</span>
           </div>
           <div className="flex flex-col">
-            <span className="text-sm font-bold">{totalScore}/{totalQuestions}</span>
+            <span className="text-sm font-bold">{totalCorrect}/{totalQuestions}</span>
             <span className="text-xs text-muted-foreground">Correct</span>
           </div>
         </div>
