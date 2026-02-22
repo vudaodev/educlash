@@ -56,7 +56,7 @@ export default function ProfilePage() {
 
       <div className="grid grid-cols-3 gap-2">
         <Card>
-          <CardContent className="flex flex-col items-center pt-4 pb-4">
+          <CardContent className="flex flex-col items-center pt-2 pb-2">
             <Flame
               className={`h-6 w-6 ${profile.current_streak > 0 ? 'text-orange-500' : 'text-muted-foreground'}`}
             />
@@ -65,13 +65,13 @@ export default function ProfilePage() {
           </CardContent>
         </Card>
         <Card>
-          <CardContent className="flex flex-col items-center pt-4 pb-4">
+          <CardContent className="flex flex-col items-center pt-2 pb-2">
             <span className="text-lg font-bold text-green-600">{profile.wins}</span>
             <span className="text-xs text-muted-foreground">Wins</span>
           </CardContent>
         </Card>
         <Card>
-          <CardContent className="flex flex-col items-center pt-4 pb-4">
+          <CardContent className="flex flex-col items-center pt-2 pb-2">
             <span className="text-lg font-bold text-destructive">{profile.losses}</span>
             <span className="text-xs text-muted-foreground">Losses</span>
           </CardContent>
