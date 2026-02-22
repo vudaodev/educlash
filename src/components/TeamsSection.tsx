@@ -6,17 +6,11 @@ import type { TeamMembership } from '@/hooks/useTeams';
 import { CreateTeamModal } from '@/components/CreateTeamModal';
 import { JoinTeamModal } from '@/components/JoinTeamModal';
 import { TeamDetailView } from '@/components/TeamDetailView';
-import { ChevronDown, ChevronRight } from 'lucide-react';
 
 export function TeamsSection() {
   const { data: memberships, isLoading } = useTeams();
   const [createOpen, setCreateOpen] = useState(false);
   const [joinOpen, setJoinOpen] = useState(false);
-  const [expandedTeamId, setExpandedTeamId] = useState<string | null>(null);
-
-  function toggleExpand(teamId: string) {
-    setExpandedTeamId((prev) => (prev === teamId ? null : teamId));
-  }
 
   return (
     <div className="flex flex-col gap-2">
@@ -37,26 +31,11 @@ export function TeamsSection() {
           <Skeleton className="h-12 w-full" />
         </div>
       ) : memberships && memberships.length > 0 ? (
-        <div className="flex flex-col gap-2">
+        <div className="flex flex-col gap-3">
           {memberships.map((m: TeamMembership) => (
-            <div key={m.team_id} className="flex flex-col">
-              <button
-                type="button"
-                onClick={() => toggleExpand(m.team.id)}
-                className="flex items-center justify-between rounded-lg border p-3 text-left transition-colors hover:bg-muted"
-              >
-                <span className="font-medium">{m.team.name}</span>
-                {expandedTeamId === m.team.id ? (
-                  <ChevronDown className="size-4 text-muted-foreground" />
-                ) : (
-                  <ChevronRight className="size-4 text-muted-foreground" />
-                )}
-              </button>
-              {expandedTeamId === m.team.id && (
-                <div className="mt-1">
-                  <TeamDetailView team={m.team} />
-                </div>
-              )}
+            <div key={m.team_id} className="flex flex-col gap-1">
+              <h4 className="font-medium">{m.team.name}</h4>
+              <TeamDetailView team={m.team} />
             </div>
           ))}
         </div>
