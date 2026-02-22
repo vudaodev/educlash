@@ -26,6 +26,7 @@ export default function QuizPlayer() {
   const [result, setResult] = useState<{
     score: number;
     total: number;
+    percentage: number;
     time_taken_seconds: number;
     xp_earned: number;
   } | null>(null);
@@ -61,9 +62,12 @@ export default function QuizPlayer() {
     });
 
     if (!error && data) {
+      const correct = data.correct_count ?? data.score;
+      const total = quiz.questions.length;
       setResult({
-        score: data.correct_count,
-        total: quiz.questions.length,
+        score: correct,
+        total,
+        percentage: total > 0 ? Math.round((correct / total) * 100) : 0,
         time_taken_seconds: timeTaken,
         xp_earned: data.xp_earned,
       });

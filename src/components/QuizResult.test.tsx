@@ -5,6 +5,7 @@ import { QuizResult } from './QuizResult';
 const mockResult = {
   score: 7,
   total: 10,
+  percentage: 70,
   time_taken_seconds: 185,
   xp_earned: 10,
 };

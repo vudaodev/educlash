@@ -5,6 +5,7 @@ import { CheckCircle2, XCircle } from 'lucide-react';
 interface ResultData {
   score: number;
   total: number;
+  percentage: number;
   time_taken_seconds: number;
   xp_earned: number;
 }
@@ -38,7 +39,7 @@ export function QuizResult({ result, questions, answers }: QuizResultProps) {
   return (
     <div className="flex flex-col gap-6 p-4">
       <div className="text-center">
-        <p className="text-4xl font-bold">{result.score}/{result.total}</p>
+        <p className="text-4xl font-bold">{result.score}/{result.total} ({result.percentage}%)</p>
         <p className="text-muted-foreground mt-1">{formatTime(result.time_taken_seconds)}</p>
         <p className="text-primary mt-1 font-semibold">+{result.xp_earned} XP</p>
       </div>
