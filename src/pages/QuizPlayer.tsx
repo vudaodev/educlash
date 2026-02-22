@@ -1,7 +1,9 @@
 import { useState, useEffect, useCallback, useRef } from 'react';
 import { useParams, useSearchParams } from 'react-router-dom';
 import { useQuiz } from '@/hooks/useQuiz';
+import { useAuth } from '@/contexts/AuthContext';
 import { QuizResult } from '@/components/QuizResult';
+import { ChallengeResult } from '@/components/ChallengeResult';
 import { Button } from '@/components/ui/button';
 import { Progress } from '@/components/ui/progress';
 import { Skeleton } from '@/components/ui/skeleton';
@@ -13,16 +15,27 @@ function formatTime(seconds: number): string {
   return `${mins}:${secs.toString().padStart(2, '0')}`;
 }
 
+interface ChallengeResultData {
+  winner_id: string;
+  my_score: number;
+  opponent_score: number;
+  my_time: number;
+  opponent_time: number;
+  opponent_name: string;
+}
+
 export default function QuizPlayer() {
   const { quizId } = useParams<{ quizId: string }>();
   const [searchParams] = useSearchParams();
   const challengeId = searchParams.get('challenge_id');
+  const { user } = useAuth();
   const { data: quiz, answers: correctAnswers, isLoading, isSuccess } = useQuiz(quizId!);
 
   const [currentIndex, setCurrentIndex] = useState(0);
   const [selectedAnswers, setSelectedAnswers] = useState<Record<string, number>>({});
   const [timeLeft, setTimeLeft] = useState<number | null>(null);
   const [submitted, setSubmitted] = useState(false);
+  const [challengeResultData, setChallengeResultData] = useState<ChallengeResultData | null>(null);
   const [result, setResult] = useState<{
     score: number;
     total: number;
@@ -71,8 +84,35 @@ export default function QuizPlayer() {
         time_taken_seconds: timeTaken,
         xp_earned: data.xp_earned,
       });
+
+      // If challenge completed (both players done), capture result
+      if (data.challenge_result?.winner_id) {
+        const cr = data.challenge_result;
+        // Fetch opponent name and determine roles
+        const challengeData = await supabase
+          .from('challenges')
+          .select('challenger:users!challenger_id(username), challenged:users!challenged_id(username), challenger_id')
+          .eq('id', challengeId!)
+          .single();
+
+        const isChallenger = challengeData.data?.challenger_id === user?.id;
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        const d = challengeData.data as any;
+        const opponentName = isChallenger
+          ? d?.challenged?.username ?? 'Opponent'
+          : d?.challenger?.username ?? 'Opponent';
+
+        setChallengeResultData({
+          winner_id: cr.winner_id,
+          my_score: isChallenger ? cr.challenger_score : cr.challenged_score,
+          opponent_score: isChallenger ? cr.challenged_score : cr.challenger_score,
+          my_time: isChallenger ? cr.challenger_time : cr.challenged_time,
+          opponent_time: isChallenger ? cr.challenged_time : cr.challenger_time,
+          opponent_name: opponentName,
+        });
+      }
     }
-  }, [quiz, correctAnswers, selectedAnswers, challengeId]);
+  }, [quiz, correctAnswers, selectedAnswers, challengeId, user?.id]);
 
   // Auto-submit when time expires
   useEffect(() => {
@@ -118,6 +158,22 @@ export default function QuizPlayer() {
   }
 
   if (submitted && result && correctAnswers) {
+    // Show challenge result if both players completed
+    if (challengeResultData && user) {
+      return (
+        <ChallengeResult
+          winnerId={challengeResultData.winner_id}
+          currentUserId={user.id}
+          myScore={challengeResultData.my_score}
+          opponentScore={challengeResultData.opponent_score}
+          myTime={challengeResultData.my_time}
+          opponentTime={challengeResultData.opponent_time}
+          opponentName={challengeResultData.opponent_name}
+          xpEarned={result.xp_earned}
+        />
+      );
+    }
+
     const answerBreakdown: Record<string, { selected: number; correct: number }> = {};
     quiz.questions.forEach((q) => {
       answerBreakdown[q.id] = {
@@ -127,11 +183,18 @@ export default function QuizPlayer() {
     });
 
     return (
-      <QuizResult
-        result={result}
-        questions={quiz.questions}
-        answers={answerBreakdown}
-      />
+      <div>
+        {challengeId && !challengeResultData && (
+          <div className="bg-muted mx-4 mt-4 rounded-lg p-3 text-center text-sm">
+            Waiting for your opponent to complete the quiz...
+          </div>
+        )}
+        <QuizResult
+          result={result}
+          questions={quiz.questions}
+          answers={answerBreakdown}
+        />
+      </div>
     );
   }
 
