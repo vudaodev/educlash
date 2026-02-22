@@ -164,10 +164,7 @@ CREATE POLICY "friendships_delete" ON friendships
 -- Team members can read
 CREATE POLICY "teams_select" ON teams
   FOR SELECT TO authenticated
-  USING (
-    owner_id = auth.uid()
-    OR id IN (SELECT team_id FROM team_members WHERE user_id = auth.uid())
-  );
+  USING (true);
 
 -- Any authenticated user can create a team
 CREATE POLICY "teams_insert" ON teams
