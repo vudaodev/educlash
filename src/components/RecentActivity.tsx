@@ -16,6 +16,7 @@ export function RecentActivity() {
         .order('completed_at', { ascending: false })
         .limit(5);
       if (error) throw error;
+      console.log('recent_activity response:', JSON.stringify(data, null, 2));
       return data;
     },
     enabled: !!user,
