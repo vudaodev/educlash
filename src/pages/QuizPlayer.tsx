@@ -50,10 +50,8 @@ export default function QuizPlayer() {
 
     const timeTaken = Math.round((Date.now() - startTimeRef.current) / 1000);
 
-    const answersArray = quiz.questions.map((q) => ({
-      question_id: q.id,
-      selected_option_index: selectedAnswers[q.id] ?? -1,
-    }));
+    // SQL RPC expects int[] — flat array of selected indexes in question order
+    const answersArray = quiz.questions.map((q) => selectedAnswers[q.id] ?? -1);
 
     const { data, error } = await supabase.rpc('submit_quiz_attempt', {
       p_quiz_id: quiz.id,
