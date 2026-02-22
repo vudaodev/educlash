@@ -7,6 +7,7 @@ import { Skeleton } from '@/components/ui/skeleton';
 import { useAuth } from '@/contexts/AuthContext';
 import { Button } from '@/components/ui/button';
 import { Flame } from 'lucide-react';
+import { FriendRequests } from '@/components/FriendRequests';
 
 export default function ProfilePage() {
   const { data: profile, isLoading } = useCurrentUser();
@@ -74,6 +75,8 @@ export default function ProfilePage() {
           </CardContent>
         </Card>
       </div>
+
+      <FriendRequests />
 
       <Button variant="outline" onClick={signOut}>
         Sign out

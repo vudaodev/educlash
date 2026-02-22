@@ -145,11 +145,11 @@
 | #     | Task                                                                                                                                                    | Status | Depends On          | Notes                                      |
 | ----- | ------------------------------------------------------------------------------------------------------------------------------------------------------- | ------ | ------------------- | ------------------------------------------ |
 | 3.1.1 | \* Create `useUserSearch` hook — TanStack Query: `supabase.from('users').select().ilike('username', '%query%').neq('id', currentUserId)` with debounce  | `[x]`  | 1.1.7, 1.4.1, 1.2.1 | `useUserSearch` in `src/hooks/useChallenges.ts`; used by CreateQuizModal + SendChallengeFlow |
-| 3.1.2 | \* Create `useFriends` hook — TanStack Query: fetch accepted friendships + pending requests via `supabase.from('friendships').select()` with user joins | `[ ]`  | 1.1.7, 1.4.1, 1.2.2 | Mutations for send request, accept request |
+| 3.1.2 | \* Create `useFriends` hook — TanStack Query: fetch accepted friendships + pending requests via `supabase.from('friendships').select()` with user joins | `[x]`  | 1.1.7, 1.4.1, 1.2.2 | Mutations for send request, accept request |
 | 3.1.3 | Build `<UserSearchBar>` — debounced Input (300ms), calls `useUserSearch`, renders result rows                                                           | `[x]`  | 1.1.6, 3.1.1        | Implemented inline in CreateQuizModal (Step 4) and SendChallengeFlow rather than as standalone component |
-| 3.1.4 | Build `<UserSearchResult>` row — Avatar, username, "Add Friend" and "Challenge" buttons                                                                 | `[ ]`  | 1.1.6, 3.1.2, 2.4.2 | —                                          |
-| 3.1.5 | Build `<FriendRequests>` section — incoming requests with Accept button; shown in Profile tab                                                           | `[ ]`  | 3.1.2, 1.1.6        | —                                          |
-| 3.1.6 | Integrate `<UserSearchBar>` into Play tab above `<PendingChallenges>`                                                                                   | `[ ]`  | 3.1.3, 2.4.5        | —                                          |
+| 3.1.4 | Build `<UserSearchResult>` row — Avatar, username, "Add Friend" and "Challenge" buttons                                                                 | `[x]`  | 1.1.6, 3.1.2, 2.4.2 | —                                          |
+| 3.1.5 | Build `<FriendRequests>` section — incoming requests with Accept button; shown in Profile tab                                                           | `[x]`  | 3.1.2, 1.1.6        | —                                          |
+| 3.1.6 | Integrate `<UserSearchBar>` into Play tab above `<PendingChallenges>`                                                                                   | `[x]`  | 3.1.3, 2.4.5        | —                                          |
 
 ### 3.2 Leaderboard
 
