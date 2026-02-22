@@ -14,8 +14,7 @@ export function TeamsSection() {
 
   return (
     <div className="flex flex-col gap-2">
-      <div className="flex items-center justify-between">
-        <h3 className="text-sm font-semibold">Teams</h3>
+      <div className="flex items-center justify-end">
         <div className="flex gap-2">
           <Button size="sm" variant="outline" onClick={() => setJoinOpen(true)}>
             Join

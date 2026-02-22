@@ -60,8 +60,7 @@ export default function PlayPage() {
 
   return (
     <div className="flex flex-col gap-4 px-4 pb-24 pt-6">
-      <div className="flex items-center justify-between">
-        <h1 className="text-2xl font-bold">Play</h1>
+      <div className="flex items-center justify-end">
         <div className="flex shrink-0 gap-2">
           <Button variant="outline" size="sm" onClick={() => setQuizOpen(true)}>Create Quiz</Button>
           <Button size="sm" onClick={() => setUploadOpen(true)}>Upload</Button>
