@@ -8,6 +8,7 @@ import { useAuth } from '@/contexts/AuthContext';
 import { Button } from '@/components/ui/button';
 import { Flame } from 'lucide-react';
 import { FriendRequests } from '@/components/FriendRequests';
+import { RecentActivity } from '@/components/RecentActivity';
 import { TeamsSection } from '@/components/TeamsSection';
 
 export default function ProfilePage() {
@@ -76,6 +77,8 @@ export default function ProfilePage() {
           </CardContent>
         </Card>
       </div>
+
+      <RecentActivity />
 
       <FriendRequests />
 
