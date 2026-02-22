@@ -53,7 +53,10 @@ export function CreateTeamModal({ open, onOpenChange }: CreateTeamModalProps) {
         setCreatedTeam(team);
         toast.success('Team created!');
       },
-      onError: () => toast.error('Failed to create team'),
+      onError: (err) => {
+        console.error('Create team error:', err);
+        toast.error('Failed to create team');
+      },
     });
   }
 

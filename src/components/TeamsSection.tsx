@@ -39,7 +39,7 @@ export function TeamsSection() {
       ) : memberships && memberships.length > 0 ? (
         <div className="flex flex-col gap-2">
           {memberships.map((m: TeamMembership) => (
-            <div key={m.id} className="flex flex-col">
+            <div key={m.team_id} className="flex flex-col">
               <button
                 type="button"
                 onClick={() => toggleExpand(m.team.id)}

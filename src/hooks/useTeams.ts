@@ -11,7 +11,6 @@ export interface Team {
 }
 
 export interface TeamMembership {
-  id: string;
   team_id: string;
   user_id: string;
   joined_at: string;
@@ -19,7 +18,6 @@ export interface TeamMembership {
 }
 
 export interface TeamMember {
-  id: string;
   team_id: string;
   user_id: string;
   joined_at: string;

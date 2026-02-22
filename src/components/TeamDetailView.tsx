@@ -51,7 +51,7 @@ export function TeamDetailView({ team }: TeamDetailViewProps) {
       ) : (
         <div className="flex flex-col gap-2">
           {members?.map((m) => (
-            <div key={m.id} className="flex items-center gap-2">
+            <div key={m.user_id} className="flex items-center gap-2">
               <Avatar className="h-7 w-7">
                 <AvatarImage src={m.user.avatar_url ?? undefined} />
                 <AvatarFallback className="text-xs">
