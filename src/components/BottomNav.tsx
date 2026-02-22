@@ -10,13 +10,13 @@ const tabs = [
 
 export function BottomNav() {
   return (
-    <nav className="fixed bottom-0 left-0 right-0 z-50 border-t bg-background">
-      <div className="mx-auto flex max-w-lg">
+    <nav className="shrink-0 border-t bg-background">
+      <div className="flex">
         {tabs.map(({ to, icon: Icon, label }) => (
           <NavLink
             key={to}
             to={to}
-            onClick={() => window.scrollTo(0, 0)}
+            onClick={() => document.getElementById('main-scroll')?.scrollTo(0, 0)}
             className={({ isActive }) =>
               `flex flex-1 flex-col items-center gap-1 py-4 text-xs transition-colors border-r border-border last:border-r-0 ${
                 isActive

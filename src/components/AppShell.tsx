@@ -8,8 +8,8 @@ export function AppShell() {
   const { theme, setTheme } = useTheme();
 
   return (
-    <div className="mx-auto min-h-screen max-w-lg">
-      <header className="sticky top-0 z-40 flex h-12 items-center justify-between border-b bg-background px-4">
+    <div className="mx-auto flex h-dvh max-w-lg flex-col overflow-hidden">
+      <header className="shrink-0 flex h-12 items-center justify-between border-b bg-background px-4">
         <span className="text-lg font-bold tracking-tight">
           <span className="text-primary">Edu</span>Clash
         </span>
@@ -21,7 +21,9 @@ export function AppShell() {
           {theme === 'dark' ? <Sun className="h-5 w-5" /> : <Moon className="h-5 w-5" />}
         </Button>
       </header>
-      <Outlet />
+      <main id="main-scroll" className="flex-1 overflow-y-auto">
+        <Outlet />
+      </main>
       <BottomNav />
     </div>
   );

@@ -17,7 +17,7 @@ export default function ProfilePage() {
 
   if (isLoading) {
     return (
-      <div className="flex flex-col gap-4 px-4 pb-24 pt-6">
+      <div className="flex flex-col gap-4 px-4 pb-6 pt-6">
         <Skeleton className="h-32 w-full" />
         <Skeleton className="h-20 w-full" />
       </div>
@@ -30,7 +30,7 @@ export default function ProfilePage() {
   const xpInLevel = profile.xp % 100;
 
   return (
-    <div className="flex flex-col gap-4 px-4 pb-24 pt-6">
+    <div className="flex flex-col gap-4 px-4 pb-6 pt-6">
       <Card>
         <CardContent className="flex flex-col items-center gap-3 pt-6">
           <Avatar className="h-16 w-16">

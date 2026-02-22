@@ -63,7 +63,7 @@ export default function PlayPage() {
   }
 
   return (
-    <div className="flex flex-col gap-4 px-4 pb-24 pt-6">
+    <div className="flex flex-col gap-4 px-4 pb-6 pt-6">
       <div className="flex flex-col gap-2">
         <div className="relative">
           <Search className="text-muted-foreground absolute top-2.5 left-2.5 size-4" />
