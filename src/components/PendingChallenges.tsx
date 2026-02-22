@@ -10,7 +10,7 @@ import { toast } from 'sonner';
 
 function categorize(challenges: Challenge[], userId: string) {
   const now = Date.now();
-  const incoming: Challenge[] = [];
+  const pending: Challenge[] = [];
   const active: Challenge[] = [];
   const waiting: Challenge[] = [];
   const completed: Challenge[] = [];
@@ -18,7 +18,7 @@ function categorize(challenges: Challenge[], userId: string) {
   for (const c of challenges) {
     if (c.status === 'pending') {
       if (new Date(c.expires_at).getTime() < now) continue; // expired
-      incoming.push(c);
+      pending.push(c);
     } else if (c.status === 'accepted') {
       const myAttempt = c.quiz_attempts.find((a) => a.user_id === userId);
       if (!myAttempt) active.push(c);
@@ -28,7 +28,7 @@ function categorize(challenges: Challenge[], userId: string) {
     }
   }
 
-  return { incoming, active, waiting, completed };
+  return { pending, active, waiting, completed };
 }
 
 export function PendingChallenges() {
@@ -47,13 +47,13 @@ export function PendingChallenges() {
 
   if (!challenges || !user) return null;
 
-  const { incoming, active, waiting, completed } = categorize(
+  const { pending, active, waiting, completed } = categorize(
     challenges,
     user.id
   );
 
   const hasAny =
-    incoming.length > 0 ||
+    pending.length > 0 ||
     active.length > 0 ||
     waiting.length > 0 ||
     completed.length > 0;
@@ -75,9 +75,9 @@ export function PendingChallenges() {
 
   return (
     <div className="flex flex-col gap-3">
-      {incoming.length > 0 && (
-        <Section title="Incoming Challenges">
-          {incoming.map((c) => (
+      {pending.length > 0 && (
+        <Section title="Challenges">
+          {pending.map((c) => (
             <ChallengeCard
               key={c.id}
               challenge={c}
