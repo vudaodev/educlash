@@ -2,7 +2,7 @@
 
 # EduClash
 EduClash is a web app that takes lecture slides and turns them into interactive quizzes using AI.
-You can add friends, create teams and compete with each other to enchance revision.
+You can add friends, create teams and compete with each other to enhance revision.
 
 
 ## What is the problem?
