@@ -49,14 +49,23 @@ export default function QuizPlayer() {
   const submittedRef = useRef(false);
   const deadlineRef = useRef<number | null>(null);
 
+  // Initialize timer and display countdown
   useEffect(() => {
-    if (quiz?.time_limit_seconds) {
-      const now = Date.now();
-      startTimeRef.current = now;
-      deadlineRef.current = now + quiz.time_limit_seconds * 1000;
-      setTimeLeft(quiz.time_limit_seconds);
-    }
-  }, [quiz?.time_limit_seconds]);
+    if (!quiz?.time_limit_seconds || submitted) return;
+
+    const now = Date.now();
+    startTimeRef.current = now;
+    const deadline = now + quiz.time_limit_seconds * 1000;
+    deadlineRef.current = deadline;
+    setTimeLeft(quiz.time_limit_seconds);
+
+    const id = setInterval(() => {
+      const remaining = Math.max(0, Math.ceil((deadline - Date.now()) / 1000));
+      setTimeLeft(remaining);
+    }, 1000);
+
+    return () => clearInterval(id);
+  }, [quiz?.time_limit_seconds, submitted]);
 
   const handleSubmit = useCallback(async () => {
     if (submittedRef.current || !quiz || !correctAnswers) return;
@@ -132,17 +141,6 @@ export default function QuizPlayer() {
     return () => clearTimeout(autoSubmitTimer);
   }, [submitted, handleSubmit]);
 
-  // Display countdown
-  useEffect(() => {
-    if (deadlineRef.current === null || submitted) return;
-
-    const id = setInterval(() => {
-      const remaining = Math.max(0, Math.ceil((deadlineRef.current! - Date.now()) / 1000));
-      setTimeLeft(remaining);
-    }, 1000);
-
-    return () => clearInterval(id);
-  }, [submitted]);
 
   if (isLoading) {
     return (
