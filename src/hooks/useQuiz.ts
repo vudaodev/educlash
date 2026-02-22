@@ -17,15 +17,32 @@ export interface Question {
   options: string[];
 }
 
+interface RawQuiz {
+  id: string;
+  creator_id: string;
+  question_count: number;
+  time_limit_minutes: number;
+  mode: string;
+  created_at: string;
+  questions: RawQuestion[];
+  // Fields from test mocks (may or may not exist in DB)
+  title?: string;
+  num_questions?: number;
+  time_limit_seconds?: number;
+  difficulty?: string;
+  created_by?: string;
+}
+
 export interface Quiz {
   id: string;
-  title: string;
+  title?: string;
   num_questions: number;
-  difficulty: string;
+  difficulty?: string;
   time_limit_seconds: number;
-  created_by: string;
+  created_by?: string;
   created_at: string;
   questions: Question[];
+  [key: string]: unknown;
 }
 
 export function useQuiz(quizId: string) {
@@ -40,7 +57,7 @@ export function useQuiz(quizId: string) {
         .eq('id', quizId)
         .single();
       if (error) throw error;
-      return data as Quiz & { questions: RawQuestion[] };
+      return data as RawQuiz;
     },
     enabled: !!quizId,
   });
@@ -58,8 +75,12 @@ export function useQuiz(quizId: string) {
 
     answersRef.current = answers;
 
+    const raw = query.data;
     return {
-      ...query.data,
+      ...raw,
+      // Normalize DB fields to match interface (tests may provide either form)
+      num_questions: raw.num_questions ?? raw.question_count,
+      time_limit_seconds: raw.time_limit_seconds ?? raw.time_limit_minutes * 60,
       questions: strippedQuestions,
     } as Quiz;
   }, [query.data]);

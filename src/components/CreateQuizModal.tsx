@@ -21,6 +21,7 @@ import { CheckCircle2 } from 'lucide-react';
 interface CreateQuizModalProps {
   open: boolean;
   onOpenChange: (open: boolean) => void;
+  onQuizCreated?: (quizId: string) => void;
 }
 
 const configSchema = z.object({
@@ -31,7 +32,7 @@ const configSchema = z.object({
 
 type ConfigValues = z.output<typeof configSchema>;
 
-export function CreateQuizModal({ open, onOpenChange }: CreateQuizModalProps) {
+export function CreateQuizModal({ open, onOpenChange, onQuizCreated }: CreateQuizModalProps) {
   const [step, setStep] = useState(1);
   const [selectedMaterials, setSelectedMaterials] = useState<string[]>([]);
   const [isGenerating, setIsGenerating] = useState(false);
@@ -80,6 +81,7 @@ export function CreateQuizModal({ open, onOpenChange }: CreateQuizModalProps) {
     toast.success('Quiz ready!');
     onOpenChange(false);
     resetState();
+    onQuizCreated?.(data.quiz_id);
   }
 
   function resetState() {

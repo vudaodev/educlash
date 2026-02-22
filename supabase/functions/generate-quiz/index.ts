@@ -33,11 +33,14 @@ Deno.serve(async (req) => {
     const supabaseServiceKey = Deno.env.get('SUPABASE_SERVICE_ROLE_KEY')!;
     const geminiApiKey = Deno.env.get('GEMINI_API_KEY')!;
 
+    console.log('ENV check:', { supabaseUrl: !!supabaseUrl, serviceKey: !!supabaseServiceKey, geminiKey: !!geminiApiKey });
+
     const supabase = createClient(supabaseUrl, supabaseServiceKey);
 
     // Verify the JWT
     const token = authHeader.replace('Bearer ', '');
     const { data: { user }, error: authError } = await supabase.auth.getUser(token);
+    console.log('Auth result:', { userId: user?.id, authError: authError?.message });
     if (authError || !user) {
       return new Response(JSON.stringify({ error: 'Unauthorized' }), {
         status: 401,
@@ -46,6 +49,7 @@ Deno.serve(async (req) => {
     }
 
     const { material_ids, question_count, time_limit_minutes, mode } = await req.json();
+    console.log('Request body:', { material_ids, question_count, time_limit_minutes, mode });
 
     if (!material_ids?.length || !question_count || !time_limit_minutes || !mode) {
       return new Response(JSON.stringify({ error: 'Missing required fields' }), {
@@ -60,8 +64,9 @@ Deno.serve(async (req) => {
       .select('extracted_text')
       .in('id', material_ids);
 
+    console.log('Materials fetch:', { count: materials?.length, error: matError?.message });
     if (matError || !materials?.length) {
-      return new Response(JSON.stringify({ error: 'Failed to fetch materials' }), {
+      return new Response(JSON.stringify({ error: 'Failed to fetch materials', details: matError?.message }), {
         status: 400,
         headers: { ...corsHeaders, 'Content-Type': 'application/json' },
       });
@@ -78,6 +83,7 @@ Deno.serve(async (req) => {
         geminiResult = await callGemini(geminiApiKey, combinedText, question_count);
         break;
       } catch (err) {
+        console.error('Gemini attempt', attempt, 'failed:', String(err));
         lastError = err as Error;
         if (attempt < 2) {
           await new Promise((r) => setTimeout(r, 1000 * (attempt + 1)));
@@ -97,15 +103,16 @@ Deno.serve(async (req) => {
       .from('quizzes')
       .insert({
         creator_id: user.id,
-        num_questions: question_count,
-        time_limit_seconds: time_limit_minutes * 60,
+        question_count,
+        time_limit_minutes,
         mode,
       })
       .select('id')
       .single();
 
+    console.log('Quiz insert:', { quizId: quiz?.id, error: quizError?.message });
     if (quizError || !quiz) {
-      return new Response(JSON.stringify({ error: 'Failed to create quiz' }), {
+      return new Response(JSON.stringify({ error: 'Failed to create quiz', details: quizError?.message }), {
         status: 500,
         headers: { ...corsHeaders, 'Content-Type': 'application/json' },
       });
@@ -122,8 +129,9 @@ Deno.serve(async (req) => {
 
     const { error: qError } = await supabase.from('questions').insert(questions);
 
+    console.log('Questions insert:', { count: questions.length, error: qError?.message });
     if (qError) {
-      return new Response(JSON.stringify({ error: 'Failed to insert questions' }), {
+      return new Response(JSON.stringify({ error: 'Failed to insert questions', details: qError?.message }), {
         status: 500,
         headers: { ...corsHeaders, 'Content-Type': 'application/json' },
       });
@@ -134,7 +142,8 @@ Deno.serve(async (req) => {
       headers: { ...corsHeaders, 'Content-Type': 'application/json' },
     });
   } catch (err) {
-    return new Response(JSON.stringify({ error: 'Internal server error' }), {
+    console.error('Edge function error:', err);
+    return new Response(JSON.stringify({ error: 'Internal server error', details: String(err) }), {
       status: 500,
       headers: { ...corsHeaders, 'Content-Type': 'application/json' },
     });
@@ -146,7 +155,7 @@ async function callGemini(
   text: string,
   questionCount: number,
 ): Promise<GeminiResponse> {
-  const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${apiKey}`;
+  const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=${apiKey}`;
 
   const response = await fetch(url, {
     method: 'POST',
@@ -194,7 +203,9 @@ Generate ${questionCount} questions.`,
   });
 
   if (!response.ok) {
-    throw new Error(`Gemini API error: ${response.status}`);
+    const errorBody = await response.text();
+    console.error('Gemini API error body:', errorBody);
+    throw new Error(`Gemini API error: ${response.status} - ${errorBody}`);
   }
 
   const data = await response.json();

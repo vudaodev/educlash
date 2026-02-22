@@ -1,10 +1,12 @@
 import { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
 import { UploadMaterialModal } from '@/components/UploadMaterialModal';
 import { CreateQuizModal } from '@/components/CreateQuizModal';
 import { FolderView } from '@/components/FolderView';
 
 export default function PlayPage() {
+  const navigate = useNavigate();
   const [uploadOpen, setUploadOpen] = useState(false);
   const [quizOpen, setQuizOpen] = useState(false);
 
@@ -22,7 +24,7 @@ export default function PlayPage() {
       </p>
       <FolderView />
       <UploadMaterialModal open={uploadOpen} onOpenChange={setUploadOpen} />
-      <CreateQuizModal open={quizOpen} onOpenChange={setQuizOpen} />
+      <CreateQuizModal open={quizOpen} onOpenChange={setQuizOpen} onQuizCreated={(id) => navigate(`/quiz/${id}`)} />
     </div>
   );
 }
