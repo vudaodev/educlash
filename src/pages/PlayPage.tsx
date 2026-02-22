@@ -13,6 +13,7 @@ import { useUserSearch, type ChallengeUser } from '@/hooks/useChallenges';
 import { useFriends, useSendFriendRequest, type Friendship } from '@/hooks/useFriends';
 import { useAuth } from '@/contexts/AuthContext';
 import { toast } from 'sonner';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Swords, Search } from 'lucide-react';
 
 function getFriendshipStatus(
@@ -63,22 +64,6 @@ export default function PlayPage() {
 
   return (
     <div className="flex flex-col gap-4 px-4 pb-24 pt-6">
-      <div className="flex items-center justify-end">
-        <div className="flex shrink-0 gap-2">
-          <Button variant="outline" size="sm" onClick={() => setQuizOpen(true)}>Create Quiz</Button>
-          <Button size="sm" onClick={() => setUploadOpen(true)}>Upload</Button>
-        </div>
-      </div>
-
-      <Button
-        variant="secondary"
-        className="w-full"
-        onClick={() => setChallengeOpen(true)}
-      >
-        <Swords className="mr-2 size-4" />
-        Challenge a Friend
-      </Button>
-
       <div className="flex flex-col gap-2">
         <div className="relative">
           <Search className="text-muted-foreground absolute top-2.5 left-2.5 size-4" />
@@ -115,10 +100,37 @@ export default function PlayPage() {
         ))}
       </div>
 
-      <PendingChallenges />
+      <Tabs defaultValue="challenges">
+        <TabsList className="w-full">
+          <TabsTrigger value="challenges" className="flex-1">Challenges</TabsTrigger>
+          <TabsTrigger value="results" className="flex-1">Recent Results</TabsTrigger>
+          <TabsTrigger value="materials" className="flex-1">Your Material</TabsTrigger>
+        </TabsList>
 
-      <h2 className="mt-2 text-lg font-semibold">Your Materials</h2>
-      <FolderView />
+        <TabsContent value="challenges" className="flex flex-col gap-3">
+          <Button
+            variant="secondary"
+            className="w-full"
+            onClick={() => setChallengeOpen(true)}
+          >
+            <Swords className="mr-2 size-4" />
+            Challenge a Friend
+          </Button>
+          <PendingChallenges filter="active" />
+        </TabsContent>
+
+        <TabsContent value="results">
+          <PendingChallenges filter="completed" />
+        </TabsContent>
+
+        <TabsContent value="materials" className="flex flex-col gap-3">
+          <div className="flex justify-end gap-2">
+            <Button variant="outline" size="sm" onClick={() => setQuizOpen(true)}>Create Quiz</Button>
+            <Button size="sm" onClick={() => setUploadOpen(true)}>Upload</Button>
+          </div>
+          <FolderView />
+        </TabsContent>
+      </Tabs>
 
       <UploadMaterialModal open={uploadOpen} onOpenChange={setUploadOpen} />
       <CreateQuizModal open={quizOpen} onOpenChange={setQuizOpen} onQuizCreated={(id) => navigate(`/quiz/${id}`)} />

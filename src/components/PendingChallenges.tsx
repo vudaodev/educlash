@@ -31,7 +31,7 @@ function categorize(challenges: Challenge[], userId: string) {
   return { pending, active, waiting, completed };
 }
 
-export function PendingChallenges() {
+export function PendingChallenges({ filter }: { filter?: 'active' | 'completed' } = {}) {
   const { user } = useAuth();
   const { data: challenges, isLoading } = useChallenges();
   const acceptMutation = useAcceptChallenge();
@@ -52,16 +52,17 @@ export function PendingChallenges() {
     user.id
   );
 
-  const hasAny =
-    pending.length > 0 ||
-    active.length > 0 ||
-    waiting.length > 0 ||
-    completed.length > 0;
+  const showActive = filter !== 'completed';
+  const showCompleted = filter !== 'active';
+
+  const hasAny = showActive
+    ? pending.length > 0 || active.length > 0 || waiting.length > 0
+    : completed.length > 0;
 
   if (!hasAny) {
     return (
       <p className="text-muted-foreground text-center text-sm">
-        No challenges yet. Send one to a friend!
+        {showActive ? 'No challenges yet. Send one to a friend!' : 'No results yet.'}
       </p>
     );
   }
@@ -75,7 +76,7 @@ export function PendingChallenges() {
 
   return (
     <div className="flex flex-col gap-3">
-      {pending.length > 0 && (
+      {showActive && pending.length > 0 && (
         <Section title="Challenges">
           {pending.map((c) => (
             <ChallengeCard
@@ -89,7 +90,7 @@ export function PendingChallenges() {
         </Section>
       )}
 
-      {active.length > 0 && (
+      {showActive && active.length > 0 && (
         <Section title="Your Turn">
           {active.map((c) => (
             <ChallengeCard
@@ -101,7 +102,7 @@ export function PendingChallenges() {
         </Section>
       )}
 
-      {waiting.length > 0 && (
+      {showActive && waiting.length > 0 && (
         <Section title="Waiting for Opponent">
           {waiting.map((c) => (
             <ChallengeCard
@@ -113,7 +114,7 @@ export function PendingChallenges() {
         </Section>
       )}
 
-      {completed.length > 0 && (
+      {showCompleted && completed.length > 0 && (
         <Section title="Recent Results">
           {completed.slice(0, 5).map((c) => (
             <ChallengeCard
