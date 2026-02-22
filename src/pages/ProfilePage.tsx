@@ -65,10 +65,12 @@ export default function ProfilePage() {
             <span className="text-xs text-muted-foreground">Streak</span>
           </div>
           <div className="flex flex-col items-center">
+            <span className="text-2xl">👑</span>
             <span className="text-lg font-bold text-green-600">{profile.wins}</span>
             <span className="text-xs text-muted-foreground">Wins</span>
           </div>
           <div className="flex flex-col items-center">
+            <span className="text-2xl">😢</span>
             <span className="text-lg font-bold text-destructive">{profile.losses}</span>
             <span className="text-xs text-muted-foreground">Losses</span>
           </div>
@@ -88,12 +90,14 @@ export default function ProfilePage() {
         </Card>
         <Card>
           <CardContent className="flex flex-col items-center pt-2 pb-2">
+            <span className="text-2xl">👑</span>
             <span className="text-lg font-bold text-green-600">{profile.wins}</span>
             <span className="text-xs text-muted-foreground">Wins</span>
           </CardContent>
         </Card>
         <Card>
           <CardContent className="flex flex-col items-center pt-2 pb-2">
+            <span className="text-2xl">😢</span>
             <span className="text-lg font-bold text-destructive">{profile.losses}</span>
             <span className="text-xs text-muted-foreground">Losses</span>
           </CardContent>
