@@ -210,11 +210,11 @@
 
 | #     | Task                                                                        | Status | Depends On   | Notes                                                    |
 | ----- | --------------------------------------------------------------------------- | ------ | ------------ | -------------------------------------------------------- |
-| 4.2.1 | Add Skeleton loading states for all data-fetching views                     | `[ ]`  | Phase 2+3    | shadcn Skeleton component                                |
-| 4.2.2 | Add empty state messages: no materials, no challenges, no friends, no teams | `[ ]`  | Phase 2+3    | Motivating copy ("Upload your first slides!")            |
-| 4.2.3 | Ensure mobile-responsive at 375px viewport; fix overflow/layout issues      | `[ ]`  | Phase 3      | Chrome DevTools mobile mode                              |
-| 4.2.4 | Add EduClash logo/wordmark to login page and app header                     | `[ ]`  | 1.4.5, 1.5.3 | SVG or text-based                                        |
-| 4.2.5 | Review and unify spacing, font weights across the app                       | `[ ]`  | Phase 3      | 30-min design pass; shadcn ensures component consistency |
+| 4.2.1 | Add Skeleton loading states for all data-fetching views                     | `[x]`  | Phase 2+3    | All data-fetching views have Skeleton states             |
+| 4.2.2 | Add empty state messages: no materials, no challenges, no friends, no teams | `[x]`  | Phase 2+3    | FolderView + RecentActivity empty states added           |
+| 4.2.3 | Ensure mobile-responsive at 375px viewport; fix overflow/layout issues      | `[x]`  | Phase 3      | Truncate + shrink fixes on PlayPage, ChallengeCard, FriendRequests |
+| 4.2.4 | Add EduClash logo/wordmark to login page and app header                     | `[x]`  | 1.4.5, 1.5.3 | Sticky header with text wordmark in AppShell             |
+| 4.2.5 | Review and unify spacing, font weights across the app                       | `[x]`  | Phase 3      | All pages use consistent px-4 pb-24 pt-6 padding         |
 
 ### 4.3 Bug Fixes & Hardening
 
