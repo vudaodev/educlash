@@ -122,11 +122,9 @@ export function CreateQuizModal({ open, onOpenChange, onQuizCreated, onChallenge
       {
         onSuccess: () => {
           toast.success(`Challenge sent to ${username}!`);
-          const quizId = generatedQuizId!;
           onOpenChange(false);
           resetState();
           onChallengeSent?.();
-          onQuizCreated?.(quizId);
         },
         onError: () => toast.error('Failed to send challenge'),
       }
