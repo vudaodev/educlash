@@ -3,13 +3,6 @@ import { supabase } from '@/lib/supabase';
 import { useAuth } from '@/contexts/AuthContext';
 import { Skeleton } from '@/components/ui/skeleton';
 
-interface RecentAttempt {
-  id: string;
-  score: number;
-  challenge_id: string | null;
-  quiz: { question_count: number }[];
-}
-
 export function RecentActivity() {
   const { user } = useAuth();
 
@@ -18,12 +11,12 @@ export function RecentActivity() {
     queryFn: async () => {
       const { data, error } = await supabase
         .from('quiz_attempts')
-        .select('id, score, challenge_id, quiz:quizzes(question_count)')
+        .select('id, score, challenge_id, quizzes(question_count)')
         .eq('user_id', user!.id)
         .order('completed_at', { ascending: false })
         .limit(5);
       if (error) throw error;
-      return data as RecentAttempt[];
+      return data;
     },
     enabled: !!user,
   });
@@ -43,10 +36,16 @@ export function RecentActivity() {
   const challenges = attempts.filter((a) => a.challenge_id);
   const solo = total - challenges.length;
   const totalScore = attempts.reduce((sum, a) => sum + a.score, 0);
-  const totalQuestions = attempts.reduce(
-    (sum, a) => sum + (a.quiz[0]?.question_count ?? 0),
-    0
-  );
+  const totalQuestions = attempts.reduce((sum, a) => {
+    const q = a.quizzes as unknown;
+    if (q && typeof q === 'object' && 'question_count' in (q as Record<string, unknown>)) {
+      return sum + ((q as Record<string, number>).question_count ?? 0);
+    }
+    if (Array.isArray(q) && q.length > 0) {
+      return sum + (q[0].question_count ?? 0);
+    }
+    return sum;
+  }, 0);
   const pct = totalQuestions > 0 ? Math.round((totalScore / totalQuestions) * 100) : 0;
 
   return (
